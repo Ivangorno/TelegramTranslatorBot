@@ -19,8 +19,8 @@ public class MyBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(MyBot.class.getName());
 
-    private static final String BOT_TOKEN = "5674632523:AAG2xGaEhs52-EMXeOVcPqfOk3WLTxeky_o";
-    private static final String BOT_USERNAME = "ivan_tutorial_java_bot";
+    private static final String BOT_TOKEN = " ";
+    private static final String BOT_USERNAME = " ";
 
     private Message message;
 
