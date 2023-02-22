@@ -5,19 +5,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Component
-public class MyBot extends TelegramLongPollingBot {
+public class TgDictionaryBot extends TelegramLongPollingBot {
 
-    private static final Logger LOGGER = Logger.getLogger(MyBot.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
     private static final String BOT_TOKEN = " ";
     private static final String BOT_USERNAME = " ";
@@ -40,6 +35,8 @@ public class MyBot extends TelegramLongPollingBot {
             message = update.getMessage();
 
             if (message.hasText()) {
+
+
                 String text = message.getText();
                 SendMessage sendEchoText = new SendMessage();
                 sendEchoText.setText("Ви відправили: " + text);
