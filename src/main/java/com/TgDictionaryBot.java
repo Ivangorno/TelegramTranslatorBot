@@ -14,10 +14,14 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
-    private static final String BOT_TOKEN = " ";
-    private static final String BOT_USERNAME = " ";
+    private static final String BOT_TOKEN = "5674632523:AAG2xGaEhs52-EMXeOVcPqfOk3WLTxeky_o";
+    private static final String BOT_USERNAME = "ivan_tutorial_java_bot";
 
+
+    private FrToEngDictionary frenchDictionary = new FrToEngDictionary( this );
     private Message message;
+
+    private FrenchToEnglishTranslationImpl frToEngImpl = new FrenchToEnglishTranslationImpl();
 
     @Override
     public String getBotUsername() {
@@ -36,17 +40,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
             if (message.hasText()) {
 
+                sendMessage(frToEngImpl.engToFrTranslate(message.getText()));
 
-                String text = message.getText();
-                SendMessage sendEchoText = new SendMessage();
-                sendEchoText.setText("Ви відправили: " + text);
-                sendEchoText.setChatId(String.valueOf(message.getChatId()));
-                try {
-                    execute(sendEchoText);
-
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -57,7 +52,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         sendMessage.setText(text);
         sendMessage.setChatId(message.getChatId());
         try {
-            execute(sendMessage);
+          execute(sendMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
