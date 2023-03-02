@@ -1,12 +1,12 @@
-package com;
-
+import com.FrenchToEnglishTranslationImpl;
+import com.TgDictionaryBot;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FrenchToEnglishTranslationImplTest {
 
-    private  TgDictionaryBot tgDictionaryBot = new TgDictionaryBot();
+    private TgDictionaryBot tgDictionaryBot = new TgDictionaryBot();
     FrenchToEnglishTranslationImpl frenchToEnglishTranslation = new FrenchToEnglishTranslationImpl();
 
 
