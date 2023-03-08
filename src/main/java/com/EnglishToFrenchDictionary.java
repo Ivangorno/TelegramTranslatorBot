@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Component
 public class EnglishToFrenchDictionary {
@@ -16,7 +17,7 @@ public class EnglishToFrenchDictionary {
 
     private String frenchWord;
     private String englishWord;
-    private Map<String, String> englishToFrenchDictionary = new HashMap<>();
+    private Map<String, String> englishToFrenchDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);;
 
     {
         englishToFrenchDictionary.put("Hello", "Bonjour");
