@@ -3,24 +3,21 @@ package com;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-
 @Component
 public class FrenchToEnglishTranslationImpl {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
-    private EngToFrenchDictionary engToFrenchDictionary;
+    private EnglishToFrenchDictionary englishToFrenchDictionary;
 
     private String frenchWord;
     private String englishWord;
 
-    public String frToEngTranslate(String frenchWord){
-        englishWord = engToFrenchDictionary.getEngToFrenchDictionary().get(frenchWord);
-        return  englishWord;
-    }
+//    public String translateFrenchToEnglish(String frenchWord){
+//        return  englishToFrenchDictionary.getEnglishToFrenchDictionary().get(frenchWord);
+//    }
 
-    public String engToFrTranslate(String englishWord) {
-        return engToFrenchDictionary.getTranslation(englishWord);
+    public String TranslateEnglishToFrench(String frenchWord) {
+        return englishToFrenchDictionary.getTranslation(frenchWord);
     }
 }

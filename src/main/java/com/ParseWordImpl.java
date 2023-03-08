@@ -2,19 +2,16 @@ package com;
 
 import org.springframework.stereotype.Component;
 
-import java.util.StringTokenizer;
 @Component
 public class ParseWordImpl {
 
 
-    private String newEngWordToAdd;
-
-    private StringTokenizer stringTokenizer;
+    private String newEnglishWordToAdd;
 
     public String[] parseEngToFreWord(String newEngWordToAdd) {
-        String[] engAndFrWord = newEngWordToAdd.split("\\s");
+        String[] englishAndFrenchWordsPair = newEngWordToAdd.split("\\s");
 
-        return engAndFrWord;
+        return englishAndFrenchWordsPair;
     }
 }
 

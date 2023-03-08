@@ -1,6 +1,8 @@
 package com;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,44 +16,44 @@ import java.util.logging.Logger;
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
-
-    private static final String BOT_TOKEN = "";
-    private static final String BOT_USERNAME = "";
+    @Value("${tgDictionary.BotToken}")
+    private  String botToken;
+    @Value("${tgDictionary.BotUserName}")
+    private  String botUsername;
 
     private Message message;
 
     @Autowired
-    private FrenchToEnglishTranslationImpl frToEngImpl;
+    private FrenchToEnglishTranslationImpl frenchToEnglishImpl;
 
     @Autowired
-    private EngToFrenchDictionary engToFrenchDictionary;
+    private EnglishToFrenchDictionary englishToFrenchDictionary;
 
     @Autowired
     private ParseWordImpl parseWord;
 
     @Override
     public String getBotUsername() {
-        return BOT_USERNAME;
+        return botUsername;
     }
 
     @Override
     public String getBotToken() {
-        return BOT_TOKEN;
+        return botToken;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
 
-
         if (update.hasMessage()) {
             message = update.getMessage();
 
             if (message.getText().contains("/add")) {
-             engToFrenchDictionary.addNewWord(parseWord.parseEngToFreWord(message.getText()));
+             englishToFrenchDictionary.addNewWord(parseWord.parseEngToFreWord(message.getText()));
             }
 
             if (message.hasText()) {
-                sendMessage(frToEngImpl.engToFrTranslate(message.getText()));
+                sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(message.getText()));
             }
         }
     }

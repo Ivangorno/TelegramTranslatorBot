@@ -12,7 +12,7 @@ class FrenchToEnglishTranslationImplTest {
 
     @Test
     void frToEngTranslate() {
-       assertEquals("Hello",frenchToEnglishTranslation.frToEngTranslate("Bonjour"));
+       assertEquals("Hello",frenchToEnglishTranslation.translateFrenchToEnglish("Bonjour"));
     }
 
     @Test
