@@ -12,14 +12,18 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.logging.Logger;
 
+import static com.utill.ErrorMessages.*;
+import static com.utill.DictionaryCommands.*;
+
+
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
     @Value("${tgDictionary.BotToken}")
-    private  String botToken;
+    private String botToken;
     @Value("${tgDictionary.BotUserName}")
-    private  String botUsername;
+    private String botUsername;
 
     private Message message;
 
@@ -47,18 +51,35 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
         if (update.hasMessage()) {
             message = update.getMessage();
-
-            if (message.getText().contains("/add")) {
-             englishToFrenchDictionary.addNewWord(parseWord.parseEngToFreWord(message.getText()));
-            }
-
             if (message.hasText()) {
-                sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(message.getText()));
+
+                if (message.getText().contains(ADD_NEW_WORD)) {
+
+                    try {
+                        englishToFrenchDictionary.addNewWord(parseWord.parseEngToFreWord(message.getText()));
+                        if (parseWord.parseEngToFreWord(message.getText()).length != 3) {
+                            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+                        } else {
+                            sendMessage(NEW_WORD_SUCCESSFULLY_ADDED);
+                        }
+
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+                    }
+                    return;
+                }
+
+                if (englishToFrenchDictionary.isEnglish(message.getText())) {
+                    sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(message.getText()));
+                } else sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
+
+
             }
         }
     }
 
-     public void sendMessage(String text) {
+    public void sendMessage(String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
         sendMessage.setChatId(message.getChatId());
