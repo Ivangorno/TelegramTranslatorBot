@@ -19,7 +19,7 @@ public class EnglishToFrenchDictionary {
 
     // 'â', 'à', 'ç', 'é', 'ê', 'ë', 'è', 'ï', 'î', 'ô', 'û', 'ù'
 
-        private Map<String, String> englishToFrenchDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);;
+        private Map<String, String> englishToFrenchDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     {
         englishToFrenchDictionary.put("Hello", "Bonjour");
@@ -30,14 +30,13 @@ public class EnglishToFrenchDictionary {
 //        return englishToFrenchDictionary;
 //    }
 
-
     public String getTranslation(String text) {
         return englishToFrenchDictionary.get(text);
     }
 
     public boolean isEnglish(String enteredWords){
-        for (char c : enteredWords.toCharArray()) {
-            if (!englishLetters.contains(c) ) {
+        for (char c : enteredWords.toLowerCase().toCharArray()) {
+            if (!englishLetters.contains(c)) {
                 return false;
             }
         }
@@ -47,8 +46,6 @@ public class EnglishToFrenchDictionary {
     public void addNewWord(String[] englishAndFrenchWord) {
 
         englishToFrenchDictionary.put(englishAndFrenchWord[1], englishAndFrenchWord[2]);
-
     }
-
 }
 

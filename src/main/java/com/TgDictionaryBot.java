@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.logging.Logger;
 
+import static com.utill.DictionaryCommands.ADD_NEW_WORD;
 import static com.utill.ErrorMessages.*;
-import static com.utill.DictionaryCommands.*;
 
 
 @Component
@@ -48,33 +48,22 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         if (update.hasMessage()) {
             message = update.getMessage();
             if (message.hasText()) {
-
-                if (message.getText().contains(ADD_NEW_WORD)) {
-
-                    try {
-                        englishToFrenchDictionary.addNewWord(parseWord.parseEngToFreWord(message.getText()));
-                        if (parseWord.parseEngToFreWord(message.getText()).length != 3) {
-                            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
-                        } else {
-                            sendMessage(NEW_WORD_SUCCESSFULLY_ADDED);
-                        }
-
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        e.printStackTrace();
-                        sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+                String text = message.getText();
+                String[] words = parseWord.parseEngToFreWord(text);
+                if (text.contains(ADD_NEW_WORD)) {
+                    if (checkArray(words)) {
+                        englishToFrenchDictionary.addNewWord(words);
+                        sendMessage(NEW_WORD_SUCCESSFULLY_ADDED);
                     }
-                    return;
                 }
-
-                if (englishToFrenchDictionary.isEnglish(message.getText())) {
-                    sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(message.getText()));
-                } else sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
-
-
+                else if (englishToFrenchDictionary.isEnglish(text)) {
+                    sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(text));
+                } else {
+                    sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
+                }
             }
         }
     }
@@ -90,4 +79,12 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         }
     }
 
+    private boolean checkArray(String[] englishAndFrenchWord) {
+        if (englishAndFrenchWord.length == 3) {
+            return true;
+        } else {
+            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+            return false;
+        }
+    }
 }
