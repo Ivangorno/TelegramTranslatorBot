@@ -12,8 +12,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.logging.Logger;
 
-import static com.utill.DictionaryCommands.ADD_NEW_WORD;
-import static com.utill.ErrorMessages.*;
+import static com.utill.DictionaryCommands.*;
+import static com.utill.DictionaryMessages.*;
 
 
 @Component
@@ -29,7 +29,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private Message message;
 
     @Autowired
-    private FrenchToEnglishTranslationImpl frenchToEnglishImpl;
+    private TranslationImpl frenchToEnglishImpl;
 
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
@@ -55,12 +55,16 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 String text = message.getText();
                 String[] words = parseWord.parseEngToFreWord(text);
                 if (text.contains(ADD_NEW_WORD)) {
-                    if (checkArray(words)) {
+                    if (checkArrayToAddWords(words)) {
                         englishToFrenchDictionary.addNewWord(words);
-                        sendMessage(NEW_WORD_SUCCESSFULLY_ADDED);
+                        sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
                     }
-                }
-                else if (englishToFrenchDictionary.isEnglish(text)) {
+                } else if (text.contains(DELETE_A_WORD)) {
+                    if (checkArrayToDeleteWords(words)) {
+                        englishToFrenchDictionary.deleteWord(words[1]);
+                        sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
+                    }
+                } else if (englishToFrenchDictionary.isEnglish(text)) {
                     sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(text));
                 } else {
                     sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
@@ -80,11 +84,20 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         }
     }
 
-    private boolean checkArray(String[] englishAndFrenchWord) {
+    private boolean checkArrayToAddWords(String[] englishAndFrenchWord) {
         if (englishAndFrenchWord.length == 3) {
             return true;
         } else {
             sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+            return false;
+        }
+    }
+
+    private boolean checkArrayToDeleteWords(String[] wordToDelete) {
+        if (wordToDelete.length == 2 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToDelete[1])) {
+            return true;
+        } else {
+            sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
             return false;
         }
     }

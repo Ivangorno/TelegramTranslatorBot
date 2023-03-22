@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class FrenchToEnglishTranslationImpl {
+public class TranslationImpl {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
@@ -18,6 +18,6 @@ public class FrenchToEnglishTranslationImpl {
 //    }
 
     public String TranslateEnglishToFrench(String frenchWord) {
-        return englishToFrenchDictionary.getTranslation(frenchWord);
+        return englishToFrenchDictionary.getEnglishToFrenchTranslation(frenchWord);
     }
 }
