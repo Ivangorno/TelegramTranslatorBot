@@ -20,6 +20,7 @@ import static com.utill.ErrorMessages.*;
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
+
     @Value("${tgDictionary.BotToken}")
     private String botToken;
     @Value("${tgDictionary.BotUserName}")
