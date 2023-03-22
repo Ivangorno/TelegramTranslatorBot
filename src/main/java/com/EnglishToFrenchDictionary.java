@@ -54,7 +54,7 @@ public class EnglishToFrenchDictionary {
     }
 
     public void updateWord(String[] englishAndFrenchWord){
-
+        englishToFrenchDictionary.computeIfPresent(englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
     }
 }
 

@@ -59,12 +59,20 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                         englishToFrenchDictionary.addNewWord(words);
                         sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
                     }
-                } else if (text.contains(DELETE_A_WORD)) {
+                } else if (text.contains(DELETE_WORD)) {
                     if (checkArrayToDeleteWords(words)) {
                         englishToFrenchDictionary.deleteWord(words[1]);
                         sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
                     }
-                } else if (englishToFrenchDictionary.isEnglish(text)) {
+
+                }
+                else if (text.contains(UPDATE_WORD)) {
+                    if (checkArrayToUpdateWords(words)) {
+                        englishToFrenchDictionary.updateWord(words);
+                        sendMessage(WORD_UPDATED_SUCCESSFULLY + " \"" + words[1] + "\"");
+                    }
+                }
+                else if (englishToFrenchDictionary.isEnglish(text)) {
                     sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(text));
                 } else {
                     sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
@@ -98,6 +106,14 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             return true;
         } else {
             sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+            return false;
+        }
+    }
+    private boolean checkArrayToUpdateWords(String[] wordToUpdate) {
+        if (wordToUpdate.length == 3 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToUpdate[1])) {
+            return true;
+        } else {
+            sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
             return false;
         }
     }
