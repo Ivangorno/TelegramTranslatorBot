@@ -5,11 +5,10 @@ import com.TgDictionaryBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.utill.DictionaryCommands.*;
-import static com.utill.DictionaryMessages.ADD_WORD_COMMAND_ENTERED_INCORRECTLY;
-import static com.utill.DictionaryMessages.NEW_WORD_SUCCESSFULLY_ADDED;
-
 @Component
+// Try to use one method to checkArray
+// Little hit you could move logic of checking if word exist into db layer where interactions
+// with words should take place.
 public class CheckArrayOfEnteredWords {
 
     @Autowired
@@ -17,7 +16,6 @@ public class CheckArrayOfEnteredWords {
 
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
-
 
 //
 //    public void checkArray(String[] enteredWords){

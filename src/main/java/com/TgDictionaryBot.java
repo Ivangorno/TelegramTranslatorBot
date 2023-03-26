@@ -13,8 +13,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.logging.Logger;
 
-import static com.utill.DictionaryCommands.*;
-import static com.utill.DictionaryMessages.*;
+import static com.WordUtils.isEnglish;
+import static com.utill.messages.DictionaryCommands.*;
+import static com.utill.messages.DictionaryMessages.*;
 
 
 @Component
@@ -31,27 +32,12 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
     @Autowired
     private TranslationImpl frenchToEnglishImpl;
-
-    private Message message;
-
-    public Message getMessage() {
-        return message;
-    }
-
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
     @Autowired
-    private ParseWordImpl parseWord;
+    private WordUtils parseWord;
 
-    @Override
-    public String getBotUsername() {
-        return botUsername;
-    }
-
-    @Override
-    public String getBotToken() {
-        return botToken;
-    }
+    private Message message;
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -60,32 +46,40 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 String text = message.getText();
                 String[] words = parseWord.parseEngToFreWord(text);
-
                 if (text.contains(ADD_NEW_WORD)) {
-                    if (checkArrayOfEnteredWords.checkArrayToAddWords(words)) {
-                        englishToFrenchDictionary.addNewWord(words);
-                        sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
-                    } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
-
+                    addWord(words);
                 } else if (text.contains(DELETE_WORD)) {
-                    if (checkArrayOfEnteredWords.checkArrayToDeleteWords(words)) {
-                        englishToFrenchDictionary.deleteWord(words[1]);
-                        sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
-                    } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-
+                    deleteWord(words);
                 } else if (text.contains(UPDATE_WORD)) {
-                    if (checkArrayOfEnteredWords.checkArrayToUpdateWords(words)) {
-                        englishToFrenchDictionary.updateWord(words);
-                        sendMessage(WORD_UPDATED_SUCCESSFULLY + " \"" + words[1] + "\" translates to: \""+words[2]+"\"");
-                    } else sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-
-                } else if (englishToFrenchDictionary.isEnglish(text)) {
+                    updateWord(words);
+                } else if (isEnglish(text)) {
                     sendMessage(frenchToEnglishImpl.translateEnglishToFrench(text));
                 } else {
                     sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                 }
             }
         }
+    }
+
+    private void updateWord(String[] words) {
+        if (checkArrayOfEnteredWords.checkArrayToUpdateWords(words)) {
+            englishToFrenchDictionary.updateWord(words);
+            sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, words[1], words[2]));
+        } else sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+    }
+
+    private void deleteWord(String[] words) {
+        if (checkArrayOfEnteredWords.checkArrayToDeleteWords(words)) {
+            englishToFrenchDictionary.deleteWord(words[1]);
+            sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
+        } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+    }
+
+    private void addWord (String[] words) {
+        if (checkArrayOfEnteredWords.checkArrayToAddWords(words)) {
+            englishToFrenchDictionary.addNewWord(words);
+            sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
+        } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
     public void sendMessage(String text) {
@@ -98,30 +92,14 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             throw new RuntimeException(e);
         }
     }
-}
 
-//    private boolean checkArrayToAddWords(String[] englishAndFrenchWord) {
-//        if (englishAndFrenchWord.length == 3) {
-//            return true;
-//        } else {
-//            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
-//            return false;
-//        }
-//    }
-//
-//    private boolean checkArrayToDeleteWords(String[] wordToDelete) {
-//        if (wordToDelete.length == 2 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToDelete[1])) {
-//            return true;
-//        } else {
-//            sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-//            return false;
-//        }
-//    }
-//    private boolean checkArrayToUpdateWords(String[] wordToUpdate) {
-//        if (wordToUpdate.length == 3 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToUpdate[1])) {
-//            return true;
-//        } else {
-//            sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-//            return false;
-//        }
-//    }
+    @Override
+    public String getBotUsername() {
+        return botUsername;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
+}

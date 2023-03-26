@@ -7,15 +7,13 @@ import java.util.*;
 
 @Component
 public class FrenchToEnglishDictionary {
-    @Autowired
-    private UTF8Validation utf8Validation;
 
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
 
-    private Set<Character> frenchLetters = new HashSet<>(
-            Arrays.asList('a','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t',
-                    'v','w','x','z','e','i','o','u','y', 'â', 'à', 'ç', 'é', 'ê', 'ë', 'è', 'ï', 'î', 'ô', 'û', 'ù'));
+    // Simplify in the same way EnglishToFrenchDictionary class.
+    private Set<Character> frenchLetters = Set.of('a','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t',
+                    'v','w','x','z','e','i','o','u','y', 'â', 'à', 'ç', 'é', 'ê', 'ë', 'è', 'ï', 'î', 'ô', 'û', 'ù');
 
     private Map<String, String> frenchToEnglishDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
