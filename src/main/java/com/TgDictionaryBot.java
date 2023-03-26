@@ -1,6 +1,7 @@
 package com;
 
 
+import com.utill.CheckArrayOfEnteredWords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,14 +27,19 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     @Value("${tgDictionary.BotUserName}")
     private String botUsername;
 
-    private Message message;
-
+    @Autowired
+    private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
     @Autowired
     private TranslationImpl frenchToEnglishImpl;
 
+    private Message message;
+
+    public Message getMessage() {
+        return message;
+    }
+
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
-
     @Autowired
     private ParseWordImpl parseWord;
 
@@ -54,26 +60,27 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 String text = message.getText();
                 String[] words = parseWord.parseEngToFreWord(text);
+
                 if (text.contains(ADD_NEW_WORD)) {
-                    if (checkArrayToAddWords(words)) {
+                    if (checkArrayOfEnteredWords.checkArrayToAddWords(words)) {
                         englishToFrenchDictionary.addNewWord(words);
                         sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
-                    }
+                    } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+
                 } else if (text.contains(DELETE_WORD)) {
-                    if (checkArrayToDeleteWords(words)) {
+                    if (checkArrayOfEnteredWords.checkArrayToDeleteWords(words)) {
                         englishToFrenchDictionary.deleteWord(words[1]);
                         sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
-                    }
+                    } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
 
-                }
-                else if (text.contains(UPDATE_WORD)) {
-                    if (checkArrayToUpdateWords(words)) {
+                } else if (text.contains(UPDATE_WORD)) {
+                    if (checkArrayOfEnteredWords.checkArrayToUpdateWords(words)) {
                         englishToFrenchDictionary.updateWord(words);
-                        sendMessage(WORD_UPDATED_SUCCESSFULLY + " \"" + words[1] + "\"");
-                    }
-                }
-                else if (englishToFrenchDictionary.isEnglish(text)) {
-                    sendMessage(frenchToEnglishImpl.TranslateEnglishToFrench(text));
+                        sendMessage(WORD_UPDATED_SUCCESSFULLY + " \"" + words[1] + "\" translates to: \""+words[2]+"\"");
+                    } else sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+
+                } else if (englishToFrenchDictionary.isEnglish(text)) {
+                    sendMessage(frenchToEnglishImpl.translateEnglishToFrench(text));
                 } else {
                     sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                 }
@@ -91,30 +98,30 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             throw new RuntimeException(e);
         }
     }
-
-    private boolean checkArrayToAddWords(String[] englishAndFrenchWord) {
-        if (englishAndFrenchWord.length == 3) {
-            return true;
-        } else {
-            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
-            return false;
-        }
-    }
-
-    private boolean checkArrayToDeleteWords(String[] wordToDelete) {
-        if (wordToDelete.length == 2 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToDelete[1])) {
-            return true;
-        } else {
-            sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-            return false;
-        }
-    }
-    private boolean checkArrayToUpdateWords(String[] wordToUpdate) {
-        if (wordToUpdate.length == 3 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToUpdate[1])) {
-            return true;
-        } else {
-            sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-            return false;
-        }
-    }
 }
+
+//    private boolean checkArrayToAddWords(String[] englishAndFrenchWord) {
+//        if (englishAndFrenchWord.length == 3) {
+//            return true;
+//        } else {
+//            sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+//            return false;
+//        }
+//    }
+//
+//    private boolean checkArrayToDeleteWords(String[] wordToDelete) {
+//        if (wordToDelete.length == 2 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToDelete[1])) {
+//            return true;
+//        } else {
+//            sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+//            return false;
+//        }
+//    }
+//    private boolean checkArrayToUpdateWords(String[] wordToUpdate) {
+//        if (wordToUpdate.length == 3 && englishToFrenchDictionary.getEnglishToFrenchDictionary().containsKey(wordToUpdate[1])) {
+//            return true;
+//        } else {
+//            sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
+//            return false;
+//        }
+//    }

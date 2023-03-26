@@ -43,4 +43,13 @@ public class FrenchToEnglishDictionary {
         frenchToEnglishDictionary.put(frenchAndEnglishWord[1], frenchAndEnglishWord[2]);
     }
 
+    public  void deleteWord(String wordToDelete){
+        frenchToEnglishDictionary.remove(wordToDelete);
+    }
+
+    public void updateWord(String[] frenchAndEnglishWord){
+        frenchToEnglishDictionary.computeIfPresent(frenchAndEnglishWord[1], (frWord, engWord) -> frWord.replace(frWord, frenchAndEnglishWord[2]));
+    }
 }
+
+

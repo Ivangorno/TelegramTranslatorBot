@@ -17,7 +17,7 @@ public class TranslationImpl {
 //        return  englishToFrenchDictionary.getEnglishToFrenchDictionary().get(frenchWord);
 //    }
 
-    public String TranslateEnglishToFrench(String frenchWord) {
+    public String translateEnglishToFrench(String frenchWord) {
         return englishToFrenchDictionary.getEnglishToFrenchTranslation(frenchWord);
     }
 }
