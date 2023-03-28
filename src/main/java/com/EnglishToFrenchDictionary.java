@@ -8,6 +8,13 @@ import java.util.*;
 @Component
 public class EnglishToFrenchDictionary {
 
+    private  Set<Character> englishLetters = Set.of('a', 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't',
+                    'v', 'w', 'x', 'z', 'e', 'i', 'o', 'u', 'y');
+
+    public  Set<Character> getEnglishLetters() {
+        return englishLetters;
+    }
+
     private Map<String, String> englishToFrenchDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     {
@@ -23,17 +30,5 @@ public class EnglishToFrenchDictionary {
         return englishToFrenchDictionary.get(text);
     }
 
-    public void addNewWord(String[] englishAndFrenchWord) {
-        englishToFrenchDictionary.put(englishAndFrenchWord[1], englishAndFrenchWord[2]);
-    }
-
-    public void deleteWord(String wordToDelete) {
-        englishToFrenchDictionary.remove(wordToDelete);
-    }
-
-    public void updateWord(String[] englishAndFrenchWord) {
-        englishToFrenchDictionary.computeIfPresent(
-                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
-    }
 }
 
