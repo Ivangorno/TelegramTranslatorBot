@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Set;
 
 
 @Component
@@ -20,9 +21,9 @@ public class WordUtils {
 
     // It's better to separate this method from EnglishToFrenchDictionary class as it's part of bussines logic
     // move here FrenchToEnglishDictionary logic as well.
-    public  boolean isWordValid(String enteredWords) {
+    public  boolean isWordValid(String enteredWords, Set<Character> allowedLetters) {
         for (char c : enteredWords.toLowerCase().toCharArray()) {
-            if (!englishToFrenchDictionary.getEnglishLetters().contains(c) || !frenchToEnglishDictionary.getFrenchLetters().contains(c)) {
+            if (!allowedLetters.contains(c)) {
                 return false;
             }
         }

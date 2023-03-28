@@ -30,7 +30,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     @Autowired
     private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
     @Autowired
-    private TranslationImpl frenchToEnglishImpl;
+    private TranslationImpl translation;
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
     @Autowired
@@ -51,8 +51,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     deleteWord(words);
                 } else if (text.contains(UPDATE_WORD)) {
                     updateWord(words);
-                } else if (wordUtils.isWordValid(text)) {
-                    sendMessage(frenchToEnglishImpl.translateEnglishToFrench(text));
+                } else if (wordUtils.isWordValid(text, englishToFrenchDictionary.getEnglishLetters())) {
+                    sendMessage(translation.translateEnglishToFrench(text));
                 } else {
                     sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                 }
