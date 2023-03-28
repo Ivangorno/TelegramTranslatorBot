@@ -1,4 +1,4 @@
-package com.utill;
+package com.utill.messages;
 
 public class DictionaryCommands {
     public final static String ADD_NEW_WORD = "/add";
