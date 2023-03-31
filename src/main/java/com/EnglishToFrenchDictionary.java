@@ -23,7 +23,7 @@ public class EnglishToFrenchDictionary {
     }
 
     public void addEngWord(String... words) {
-        engToFrDictionary.put(words[1], words[2]);
+        engToFrDictionary.put(words[0], words[1]);
     }
 
     public void deleteWord(String wordToDelete) {

@@ -2,7 +2,6 @@ package com;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.Set;
 
@@ -32,12 +31,15 @@ public class WordUtils {
         frenchToEnglishDictionary.addFrWord(frWord, engWord);
     }
 
-    //Example, delete later
-    @Autowired
-    private TgDictionaryBot tgDictionaryBot;
 
-    private void someMethod() {
-        SendMessage sendMessage = new SendMessage();
-        tgDictionaryBot.sendMessage(sendMessage);
-    }
+
+
+    //Example, delete later
+//    @Autowired
+//    private TgDictionaryBot tgDictionaryBot;
+//
+//    private void someMethod() {
+//        SendMessage sendMessage = new SendMessage();
+//        tgDictionaryBot.sendMessage(sendMessage);
+//    }
 }

@@ -8,8 +8,8 @@ import java.util.*;
 @Component
 public class FrenchToEnglishDictionary {
 
-    @Autowired
-    private TgDictionaryBot tgDictionaryBot;
+//    @Autowired
+//    private TgDictionaryBot tgDictionaryBot;
 
     private Map<String, String> frToEngDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
@@ -23,7 +23,7 @@ public class FrenchToEnglishDictionary {
     }
 
     public void addFrWord(String... words) {
-        frToEngDictionary.put(words[1], words[2]);
+        frToEngDictionary.put(words[0], words[1]);
     }
 
     public void deleteWord(String wordToDelete) {
@@ -32,7 +32,7 @@ public class FrenchToEnglishDictionary {
 
     public void updateWord(String[] englishAndFrenchWord) {
         frToEngDictionary.computeIfPresent(
-                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
+                englishAndFrenchWord[1], (frWord, engWord) -> frWord.replace(frWord, englishAndFrenchWord[2]));
     }
 
 }

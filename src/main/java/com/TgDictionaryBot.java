@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.utill.messages.DictionaryCommands.*;
@@ -46,10 +48,11 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             message = update.getMessage();
             if (message.hasText()) {
                 String text = message.getText();
+                String[] words = wordUtils.parseEngToFreWord(text);
+//                  change this boolean in future
                 if(isEnglish) {
-                    String[] words = wordUtils.parseEngToFreWord(text);
                     if (text.contains(ADD_NEW_WORD)) {
-                        addWord(words);
+                        addWordEnglishTranslation(words);
                     } else if (text.contains(DELETE_WORD)) {
                         deleteWord(words);
                     } else if (text.contains(UPDATE_WORD)) {
@@ -60,7 +63,18 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                         sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                     }
                 } else {
-                    
+
+                    if (text.contains(ADD_NEW_WORD)) {
+                        addWordFrenchTranslation(words);
+                    } else if (text.contains(DELETE_WORD)) {
+                        deleteWord(words);
+                    } else if (text.contains(UPDATE_WORD)) {
+                        updateWord(words);
+                    } else if (wordUtils.isWordValid(text, FRENCH_LETTERS)) {
+                        sendMessage(translation.translateEnglishToFrench(text));
+                    } else {
+                        sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
+                    }
                 }
             }
         }
@@ -76,14 +90,21 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private void deleteWord(String[] words) {
         if (checkArrayOfEnteredWords.checkArray(words, 2)) {
             englishToFrenchDictionary.deleteWord(words[1]);
-            sendMessage(WORD_DELETED_SUCCESSFULLY + " \"" + words[1] + "\"");
+            sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, words[1]));
         } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    private void addWord(String[] words) {
+    private void addWordEnglishTranslation(String[] words) {
         if (checkArrayOfEnteredWords.checkArray(words, 3)) {
             wordUtils.addNewWord(words[1], words[2]);
-            sendMessage(NEW_WORD_SUCCESSFULLY_ADDED + " \"" + words[1] + "\"");
+            sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[1]));
+        } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
+    }
+
+    private void addWordFrenchTranslation(String[] words) {
+        if (checkArrayOfEnteredWords.checkArray(words, 3)) {
+            wordUtils.addNewWord(words[2], words[1]);
+            sendMessage( String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[2]));
         } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
