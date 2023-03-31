@@ -18,6 +18,10 @@ public class FrenchToEnglishDictionary {
         frToEngDictionary.put("Chat", "Cat");
     }
 
+    public Map<String, String> getFrToEngDictionary() {
+        return frToEngDictionary;
+    }
+
     public String getFrenchToEnglishTranslation(String text) {
         return frToEngDictionary.get(text);
     }
@@ -26,14 +30,14 @@ public class FrenchToEnglishDictionary {
         frToEngDictionary.put(words[0], words[1]);
     }
 
-    public void deleteWord(String wordToDelete) {
-        frToEngDictionary.remove(wordToDelete);
-    }
+//    public void deleteWord(String wordToDelete) {
+//        frToEngDictionary.remove(wordToDelete);
+//    }
 
-    public void updateWord(String[] englishAndFrenchWord) {
-        frToEngDictionary.computeIfPresent(
-                englishAndFrenchWord[1], (frWord, engWord) -> frWord.replace(frWord, englishAndFrenchWord[2]));
-    }
+//    public void updateWord(String[] englishAndFrenchWord) {
+//        frToEngDictionary.computeIfPresent(
+//                englishAndFrenchWord[1], (frWord, engWord) -> frWord.replace(frWord, englishAndFrenchWord[2]));
+//    }
 
 }
 

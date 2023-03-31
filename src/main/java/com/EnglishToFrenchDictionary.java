@@ -26,14 +26,14 @@ public class EnglishToFrenchDictionary {
         engToFrDictionary.put(words[0], words[1]);
     }
 
-    public void deleteWord(String wordToDelete) {
-        engToFrDictionary.remove(wordToDelete);
-    }
+//    public void deleteWord(String wordToDelete) {
+//        engToFrDictionary.remove(wordToDelete);
+//    }
 
-    public void updateWord(String[] englishAndFrenchWord) {
-        engToFrDictionary.computeIfPresent(
-                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
-    }
+//    public void updateWord(String[] englishAndFrenchWord) {
+//        engToFrDictionary.computeIfPresent(
+//                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
+//    }
 
 }
 

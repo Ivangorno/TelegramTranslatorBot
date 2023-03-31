@@ -38,6 +38,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
     @Autowired
+    private FrenchToEnglishDictionary frenchToEnglishDictionary;
+    @Autowired
     private WordUtils wordUtils;
 
     private Message message;
@@ -54,24 +56,23 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     if (text.contains(ADD_NEW_WORD)) {
                         addWordEnglishTranslation(words);
                     } else if (text.contains(DELETE_WORD)) {
-                        deleteWord(words);
+                        deleteWord(words, englishToFrenchDictionary.getEngToFrDictionary());
                     } else if (text.contains(UPDATE_WORD)) {
-                        updateWord(words);
+                        updateWord(words, englishToFrenchDictionary.getEngToFrDictionary());
                     } else if (wordUtils.isWordValid(text, ENGLISH_LETTERS)) {
                         sendMessage(translation.translateEnglishToFrench(text));
                     } else {
                         sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                     }
                 } else {
-
                     if (text.contains(ADD_NEW_WORD)) {
                         addWordFrenchTranslation(words);
                     } else if (text.contains(DELETE_WORD)) {
-                        deleteWord(words);
+                        deleteWord(words, frenchToEnglishDictionary.getFrToEngDictionary());
                     } else if (text.contains(UPDATE_WORD)) {
-                        updateWord(words);
+                        updateWord(words, frenchToEnglishDictionary.getFrToEngDictionary());
                     } else if (wordUtils.isWordValid(text, FRENCH_LETTERS)) {
-                        sendMessage(translation.translateEnglishToFrench(text));
+                        sendMessage(translation.translateFrenchToEnglish(text));
                     } else {
                         sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                     }
@@ -80,16 +81,16 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         }
     }
 
-    private void updateWord(String[] words) {
+    private void updateWord(String[] words, Map<String, String> dictionary) {
         if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            englishToFrenchDictionary.updateWord(words);
+            wordUtils.updateWord(words, dictionary);
             sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, words[1], words[2]));
         } else sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    private void deleteWord(String[] words) {
+    private void deleteWord(String[] words, Map<String, String> dictionary) {
         if (checkArrayOfEnteredWords.checkArray(words, 2)) {
-            englishToFrenchDictionary.deleteWord(words[1]);
+            wordUtils.deleteWord(words[1], dictionary);
             sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, words[1]));
         } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
@@ -103,8 +104,9 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private void addWordFrenchTranslation(String[] words) {
         if (checkArrayOfEnteredWords.checkArray(words, 3)) {
+            //need to update addWord method for multiple Dictionaries
             wordUtils.addNewWord(words[2], words[1]);
-            sendMessage( String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[2]));
+            sendMessage( String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[1]));
         } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 

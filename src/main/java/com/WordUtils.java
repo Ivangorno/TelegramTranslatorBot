@@ -3,6 +3,7 @@ package com;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Set;
 
 
@@ -31,6 +32,14 @@ public class WordUtils {
         frenchToEnglishDictionary.addFrWord(frWord, engWord);
     }
 
+    public void deleteWord(String wordToDelete, Map<String, String> dictionary) {
+        dictionary.remove(wordToDelete);
+    }
+
+    public void updateWord(String[] englishAndFrenchWord, Map<String, String> dictionary) {
+        dictionary.computeIfPresent(
+                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
+    }
 
 
 

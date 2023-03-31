@@ -9,13 +9,13 @@ public class TranslationImpl {
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
     private EnglishToFrenchDictionary englishToFrenchDictionary;
-
+    @Autowired
     private FrenchToEnglishDictionary frenchToEnglishDictionary;
 
     public String translateEnglishToFrench(String frenchWord) {
         return englishToFrenchDictionary.getEnglishToFrenchTranslation(frenchWord);
     }
-    public String translateFrenchToEnglish(String frenchWord) {
-        return frenchToEnglishDictionary.getFrenchToEnglishTranslation(frenchWord);
+    public String translateFrenchToEnglish(String engWord) {
+        return frenchToEnglishDictionary.getFrenchToEnglishTranslation(engWord);
     }
 }
