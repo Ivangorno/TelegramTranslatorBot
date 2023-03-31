@@ -11,22 +11,28 @@ public class FrenchToEnglishDictionary {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
 
-    private Set<Character> frenchLetters = Set.of('a','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t',
-                    'v','w','x','z','e','i','o','u','y', 'â', 'à', 'ç', 'é', 'ê', 'ë', 'è', 'ï', 'î', 'ô', 'û', 'ù');
-
-    public Set<Character> getFrenchLetters() {
-        return frenchLetters;
-    }
-    private Map<String, String> frenchToEnglishDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+    private Map<String, String> frToEngDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
     {
-        frenchToEnglishDictionary.put("Bonjour", "Hello");
-        frenchToEnglishDictionary.put("Chat", "Cat");
+        frToEngDictionary.put("Bonjour", "Hello");
+        frToEngDictionary.put("Chat", "Cat");
     }
 
-
     public String getFrenchToEnglishTranslation(String text) {
-        return frenchToEnglishDictionary.get(text);
+        return frToEngDictionary.get(text);
+    }
+
+    public void addFrWord(String... words) {
+        frToEngDictionary.put(words[1], words[2]);
+    }
+
+    public void deleteWord(String wordToDelete) {
+        frToEngDictionary.remove(wordToDelete);
+    }
+
+    public void updateWord(String[] englishAndFrenchWord) {
+        frToEngDictionary.computeIfPresent(
+                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
     }
 
 }
