@@ -22,10 +22,5 @@ public class EnglishDictionary {
         return engToFrDictionary.get(text);
     }
 
-//    public void addEngWord(String... words) {
-//        engToFrDictionary.put(words[0], words[1]);
-//    }
-
-
 }
 

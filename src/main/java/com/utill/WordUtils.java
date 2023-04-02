@@ -1,8 +1,5 @@
 package com.utill;
 
-import com.EnglishDictionary;
-import com.FrenchDictionary;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -11,17 +8,13 @@ import java.util.Set;
 
 @Component
 public class WordUtils {
-    @Autowired
-    private EnglishDictionary englishDictionary;
-    @Autowired
-    private FrenchDictionary frenchToEnglishDictionary;
 
     public String[] parseEngToFreWord(String newEngWordToAdd) {
         return newEngWordToAdd.split("\\s");
     }
 
-    public boolean isWordValid(String enteredWords, Set<Character> allowedLetters) {
-        for (char c : enteredWords.toLowerCase().toCharArray()) {
+    public boolean isWordValid(String enteredWord, Set<Character> allowedLetters) {
+        for (char c : enteredWord.toLowerCase().toCharArray()) {
             if (!allowedLetters.contains(c)) {
                 return false;
             }
@@ -29,7 +22,7 @@ public class WordUtils {
         return true;
     }
 
-    public void addNewWord(String enteredWord, String translation,Map<String, String> primaryDictionary, Map<String, String> secondaryDictionary) {
+    public void addNewWord(String enteredWord, String translation, Map<String, String> primaryDictionary, Map<String, String> secondaryDictionary) {
         primaryDictionary.put(enteredWord, translation);
         secondaryDictionary.put(translation, enteredWord);
     }
@@ -38,19 +31,8 @@ public class WordUtils {
         dictionary.remove(wordToDelete);
     }
 
-    public void updateWord(String[] englishAndFrenchWord, Map<String, String> dictionary) {
+    public void updateWord(String[] enteredWords, Map<String, String> dictionary) {
         dictionary.computeIfPresent(
-                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
+                enteredWords[1], (wordToUpdate, newTranslation) -> wordToUpdate.replace(wordToUpdate, enteredWords[2]));
     }
-
-
-
-    //Example, delete later
-//    @Autowired
-//    private TgDictionaryBot tgDictionaryBot;
-//
-//    private void someMethod() {
-//        SendMessage sendMessage = new SendMessage();
-//        tgDictionaryBot.sendMessage(sendMessage);
-//    }
 }

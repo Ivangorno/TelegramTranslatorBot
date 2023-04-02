@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 import static com.utill.messages.DictionaryMessages.*;
-import static com.utill.messages.DictionaryMessages.ADD_WORD_COMMAND_ENTERED_INCORRECTLY;
+
 @Component
 public class DictionaryUtils {
     @Autowired
@@ -31,12 +31,10 @@ public class DictionaryUtils {
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void addWord(String[] words, Map<String, String> primaryDictionary,Map<String, String> secondaryDictionary ) {
+    public void addWord(String[] words, Map<String, String> primaryDictionary, Map<String, String> secondaryDictionary) {
         if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            wordUtils.addNewWord(words[1], words[2],primaryDictionary,secondaryDictionary );
+            wordUtils.addNewWord(words[1], words[2], primaryDictionary, secondaryDictionary);
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[1]));
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
-
-
 }

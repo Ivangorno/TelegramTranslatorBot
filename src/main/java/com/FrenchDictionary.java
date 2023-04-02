@@ -22,19 +22,6 @@ public class FrenchDictionary {
         return frToEngDictionary.get(text);
     }
 
-//    public void addFrWord(String... words) {
-//        frToEngDictionary.put(words[0], words[1]);
-//    }
-//
-////    public void deleteWord(String wordToDelete) {
-////        frToEngDictionary.remove(wordToDelete);
-////    }
-//
-////    public void updateWord(String[] englishAndFrenchWord) {
-////        frToEngDictionary.computeIfPresent(
-////                englishAndFrenchWord[1], (frWord, engWord) -> frWord.replace(frWord, englishAndFrenchWord[2]));
-////    }
-
 }
 
 

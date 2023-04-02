@@ -1,7 +1,6 @@
 package com;
 
 
-import com.utill.CheckArrayOfEnteredWords;
 import com.utill.DictionaryUtils;
 import com.utill.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
 
 import static com.utill.messages.DictionaryCommands.*;
 import static com.utill.messages.DictionaryMessages.*;
-
+import static com.utill.AllowedLetters.*;
 
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
@@ -27,7 +26,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
-        @Override
+    @Override
     public String getBotUsername() {
         return botUsername;
     }
@@ -41,9 +40,6 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private String botToken;
     @Value("${tgDictionary.BotUserName}")
     private String botUsername;
-
-    @Autowired
-    private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
     @Autowired
     private TranslationImpl translation;
     @Autowired
@@ -54,7 +50,6 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private WordUtils wordUtils;
     @Autowired
     private DictionaryUtils dictionaryUtils;
-
     private Message message;
 
     @Override
@@ -64,13 +59,12 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 String text = message.getText();
                 String[] words = wordUtils.parseEngToFreWord(text);
-                Map<String,String> engToFrDictionary = englishDictionary.getEngToFrDictionary();
-                Map<String,String> frToEngDictionary = frenchToEnglishDictionary.getFrToEngDictionary();
+                Map<String, String> engToFrDictionary = englishDictionary.getEngToFrDictionary();
+                Map<String, String> frToEngDictionary = frenchToEnglishDictionary.getFrToEngDictionary();
 
-
-                if(isEnglish) { //change this boolean in the future
+                if (isEnglish) { //change this boolean in the future
                     if (text.contains(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words, engToFrDictionary,frToEngDictionary);
+                        dictionaryUtils.addWord(words, engToFrDictionary, frToEngDictionary);
                     } else if (text.contains(DELETE_WORD)) {
                         dictionaryUtils.deleteWord(words, engToFrDictionary);
                     } else if (text.contains(UPDATE_WORD)) {
@@ -82,7 +76,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (text.contains(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words,frToEngDictionary, engToFrDictionary);
+                        dictionaryUtils.addWord(words, frToEngDictionary, engToFrDictionary);
                     } else if (text.contains(DELETE_WORD)) {
                         dictionaryUtils.deleteWord(words, frToEngDictionary);
                     } else if (text.contains(UPDATE_WORD)) {
