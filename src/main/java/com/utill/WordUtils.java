@@ -1,5 +1,7 @@
-package com;
+package com.utill;
 
+import com.EnglishDictionary;
+import com.FrenchDictionary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +12,9 @@ import java.util.Set;
 @Component
 public class WordUtils {
     @Autowired
-    private EnglishToFrenchDictionary englishToFrenchDictionary;
+    private EnglishDictionary englishDictionary;
     @Autowired
-    private FrenchToEnglishDictionary frenchToEnglishDictionary;
+    private FrenchDictionary frenchToEnglishDictionary;
 
     public String[] parseEngToFreWord(String newEngWordToAdd) {
         return newEngWordToAdd.split("\\s");
@@ -27,9 +29,9 @@ public class WordUtils {
         return true;
     }
 
-    public void addNewWord(String engWord, String frWord) {
-        englishToFrenchDictionary.addEngWord(engWord, frWord);
-        frenchToEnglishDictionary.addFrWord(frWord, engWord);
+    public void addNewWord(String enteredWord, String translation,Map<String, String> primaryDictionary, Map<String, String> secondaryDictionary) {
+        primaryDictionary.put(enteredWord, translation);
+        secondaryDictionary.put(translation, enteredWord);
     }
 
     public void deleteWord(String wordToDelete, Map<String, String> dictionary) {

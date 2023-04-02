@@ -1,4 +1,4 @@
-import com.EnglishToFrenchDictionary;
+import com.EnglishDictionary;
 import com.TgDictionaryBot;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -10,17 +10,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest( classes = EnglishToFrenchDictionary.class)
+@SpringBootTest( classes = EnglishDictionary.class)
 @MockBean({
         TgDictionaryBot.class
 })
 class FrenchToEnglishTranslationImplTest {
 
     @Autowired
-    private EnglishToFrenchDictionary englishToFrenchDictionary;
+    private EnglishDictionary englishDictionary;
 
     @Test
     void frToEngTranslate() {
-       assertEquals("Bonjour",englishToFrenchDictionary.getEnglishToFrenchTranslation("Hello"));
+       assertEquals("Bonjour", englishDictionary.getEnglishToFrenchTranslation("Hello"));
     }
 }

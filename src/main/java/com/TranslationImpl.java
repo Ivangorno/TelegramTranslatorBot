@@ -8,12 +8,12 @@ public class TranslationImpl {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
-    private EnglishToFrenchDictionary englishToFrenchDictionary;
+    private EnglishDictionary englishDictionary;
     @Autowired
-    private FrenchToEnglishDictionary frenchToEnglishDictionary;
+    private FrenchDictionary frenchToEnglishDictionary;
 
     public String translateEnglishToFrench(String frenchWord) {
-        return englishToFrenchDictionary.getEnglishToFrenchTranslation(frenchWord);
+        return englishDictionary.getEnglishToFrenchTranslation(frenchWord);
     }
     public String translateFrenchToEnglish(String engWord) {
         return frenchToEnglishDictionary.getFrenchToEnglishTranslation(engWord);

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class EnglishToFrenchDictionary {
+public class EnglishDictionary {
 
     private Map<String, String> engToFrDictionary = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
@@ -22,18 +22,10 @@ public class EnglishToFrenchDictionary {
         return engToFrDictionary.get(text);
     }
 
-    public void addEngWord(String... words) {
-        engToFrDictionary.put(words[0], words[1]);
-    }
-
-//    public void deleteWord(String wordToDelete) {
-//        engToFrDictionary.remove(wordToDelete);
+//    public void addEngWord(String... words) {
+//        engToFrDictionary.put(words[0], words[1]);
 //    }
 
-//    public void updateWord(String[] englishAndFrenchWord) {
-//        engToFrDictionary.computeIfPresent(
-//                englishAndFrenchWord[1], (engWord, frWord) -> engWord.replace(engWord, englishAndFrenchWord[2]));
-//    }
 
 }
 

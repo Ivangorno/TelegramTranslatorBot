@@ -2,6 +2,8 @@ package com;
 
 
 import com.utill.CheckArrayOfEnteredWords;
+import com.utill.DictionaryUtils;
+import com.utill.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.utill.messages.DictionaryCommands.*;
@@ -22,9 +23,19 @@ import static com.utill.messages.DictionaryMessages.*;
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
+    private boolean isEnglish = true; //delete this boolean in the future
+
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
-    private boolean isEnglish = true;
+        @Override
+    public String getBotUsername() {
+        return botUsername;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
 
     @Value("${tgDictionary.BotToken}")
     private String botToken;
@@ -36,11 +47,13 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     @Autowired
     private TranslationImpl translation;
     @Autowired
-    private EnglishToFrenchDictionary englishToFrenchDictionary;
+    private EnglishDictionary englishDictionary;
     @Autowired
-    private FrenchToEnglishDictionary frenchToEnglishDictionary;
+    private FrenchDictionary frenchToEnglishDictionary;
     @Autowired
     private WordUtils wordUtils;
+    @Autowired
+    private DictionaryUtils dictionaryUtils;
 
     private Message message;
 
@@ -51,14 +64,17 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             if (message.hasText()) {
                 String text = message.getText();
                 String[] words = wordUtils.parseEngToFreWord(text);
-//                  change this boolean in future
-                if(isEnglish) {
+                Map<String,String> engToFrDictionary = englishDictionary.getEngToFrDictionary();
+                Map<String,String> frToEngDictionary = frenchToEnglishDictionary.getFrToEngDictionary();
+
+
+                if(isEnglish) { //change this boolean in the future
                     if (text.contains(ADD_NEW_WORD)) {
-                        addWordEnglishTranslation(words);
+                        dictionaryUtils.addWord(words, engToFrDictionary,frToEngDictionary);
                     } else if (text.contains(DELETE_WORD)) {
-                        deleteWord(words, englishToFrenchDictionary.getEngToFrDictionary());
+                        dictionaryUtils.deleteWord(words, engToFrDictionary);
                     } else if (text.contains(UPDATE_WORD)) {
-                        updateWord(words, englishToFrenchDictionary.getEngToFrDictionary());
+                        dictionaryUtils.updateWord(words, engToFrDictionary);
                     } else if (wordUtils.isWordValid(text, ENGLISH_LETTERS)) {
                         sendMessage(translation.translateEnglishToFrench(text));
                     } else {
@@ -66,11 +82,11 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (text.contains(ADD_NEW_WORD)) {
-                        addWordFrenchTranslation(words);
+                        dictionaryUtils.addWord(words,frToEngDictionary, engToFrDictionary);
                     } else if (text.contains(DELETE_WORD)) {
-                        deleteWord(words, frenchToEnglishDictionary.getFrToEngDictionary());
+                        dictionaryUtils.deleteWord(words, frToEngDictionary);
                     } else if (text.contains(UPDATE_WORD)) {
-                        updateWord(words, frenchToEnglishDictionary.getFrToEngDictionary());
+                        dictionaryUtils.updateWord(words, frToEngDictionary);
                     } else if (wordUtils.isWordValid(text, FRENCH_LETTERS)) {
                         sendMessage(translation.translateFrenchToEnglish(text));
                     } else {
@@ -79,35 +95,6 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 }
             }
         }
-    }
-
-    private void updateWord(String[] words, Map<String, String> dictionary) {
-        if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            wordUtils.updateWord(words, dictionary);
-            sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, words[1], words[2]));
-        } else sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-    }
-
-    private void deleteWord(String[] words, Map<String, String> dictionary) {
-        if (checkArrayOfEnteredWords.checkArray(words, 2)) {
-            wordUtils.deleteWord(words[1], dictionary);
-            sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, words[1]));
-        } else sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
-    }
-
-    private void addWordEnglishTranslation(String[] words) {
-        if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            wordUtils.addNewWord(words[1], words[2]);
-            sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[1]));
-        } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
-    }
-
-    private void addWordFrenchTranslation(String[] words) {
-        if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            //need to update addWord method for multiple Dictionaries
-            wordUtils.addNewWord(words[2], words[1]);
-            sendMessage( String.format(NEW_WORD_SUCCESSFULLY_ADDED, words[1]));
-        } else sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
     public void sendMessage(String text) {
@@ -119,24 +106,5 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void sendMessage(SendMessage sendMessage) {
-        sendMessage.setChatId(message.getChatId());
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public String getBotUsername() {
-        return botUsername;
-    }
-
-    @Override
-    public String getBotToken() {
-        return botToken;
     }
 }
