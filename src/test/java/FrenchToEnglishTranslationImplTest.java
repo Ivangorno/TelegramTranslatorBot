@@ -1,3 +1,4 @@
+import com.db.DictionaryController;
 import com.EnglishDictionary;
 import com.TgDictionaryBot;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,11 @@ class FrenchToEnglishTranslationImplTest {
     @Autowired
     private EnglishDictionary englishDictionary;
 
+    @Autowired
+    private DictionaryController dictionaryController;
+
     @Test
     void frToEngTranslate() {
-       assertEquals("Bonjour", englishDictionary.getEnglishToFrenchTranslation("Hello"));
+       assertEquals("Bonjour", dictionaryController.getEnglishToFrenchTranslation("Hello"));
     }
 }

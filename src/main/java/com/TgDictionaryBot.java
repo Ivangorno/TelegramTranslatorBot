@@ -1,6 +1,7 @@
 package com;
 
 
+import com.db.DictionaryController;
 import com.utill.DictionaryUtils;
 import com.utill.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         return botToken;
     }
 
+    @Autowired
+    private DictionaryController dictionaryController;
     @Value("${tgDictionary.BotToken}")
     private String botToken;
     @Value("${tgDictionary.BotUserName}")
@@ -60,7 +63,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 String text = message.getText();
                 String[] words = wordUtils.parseEngToFreWord(text);
                 String dictionaryCommand = words[0];
-                Map<String, String> engToFrDictionary = englishDictionary.getEngToFrDictionary();
+                Map<String, String> engToFrDictionary = dictionaryController.getEngToFrDictionary();
                 Map<String, String> frToEngDictionary = frenchToEnglishDictionary.getFrToEngDictionary();
 
                 if (isEnglish) { //change this boolean in the future
