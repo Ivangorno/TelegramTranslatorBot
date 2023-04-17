@@ -14,10 +14,10 @@ import javax.persistence.*;
 public class EnglishToFrenchPair {
 
     @Column(name = "english")
-    private  String english;
+    private  String englishWord;
 
     @Column(name = "french")
-    private  String french;
+    private  String frenchWord;
 
 
 

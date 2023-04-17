@@ -1,10 +1,8 @@
-package com.db;
+package com.dataBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 @Component
@@ -22,4 +20,15 @@ public class EnglishDictionaryDao {
             throw new RuntimeException(e);
         }
     }
+
+    public void deleteWord(String englishWord){
+        try {
+            Statement statement = connectionCreator.getConnection().createStatement();
+            String SQL = String.format("DELETE FROM ENGLISH_DICTIONARY WHERE english= '%s'", englishWord);
+            statement.execute(SQL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

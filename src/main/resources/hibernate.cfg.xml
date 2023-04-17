@@ -26,7 +26,7 @@
         <property name="show_sql">true</property>
 
         <!-- Names the annotated entity class -->
-        <mapping class="com.db.DictionaryController"/>
+        <mapping class="com.dataBase.DictionaryController"/>
 
     </session-factory>
 

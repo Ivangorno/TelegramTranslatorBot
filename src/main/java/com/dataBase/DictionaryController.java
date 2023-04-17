@@ -1,18 +1,9 @@
-package com.db;
+package com.dataBase;
 
-import com.config.DictionaryMapper;
-import com.config.SpringConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.*;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Map;
 import java.util.TreeMap;
@@ -46,8 +37,20 @@ public class DictionaryController {
     public Map<String, String> getEngToFrDictionary() {
         return engToFrDictionary;
     }
-    public String getEnglishToFrenchTranslation(String text) {
-        return engToFrDictionary.get(text);
+
+    public String getEnglishToFrenchTranslation(String enteredText) {
+        try {
+            Statement statement = connectionCreator.getConnection().createStatement();
+            String SQL = String.format("SELECT french FROM ENGLISH_DICTIONARY WHERE english ='%s'", enteredText);
+
+            ResultSet resultSet = statement.executeQuery(SQL);
+            resultSet.next();
+
+            return resultSet.getString("french");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

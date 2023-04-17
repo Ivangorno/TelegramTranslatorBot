@@ -1,6 +1,6 @@
 package com.utill;
 
-import com.db.EnglishDictionaryDao;
+import com.dataBase.EnglishDictionaryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,12 +25,12 @@ public class WordUtils {
         return true;
     }
 
-    public void addNewWord(String enteredWord, String translation, Map<String, String> primaryDictionary, Map<String, String> secondaryDictionary) {
+    public void addNewWord(String enteredWord, String translation) {
        englishDictionaryDao.saveNewWord(enteredWord, translation);
     }
 
-    public void deleteWord(String wordToDelete, Map<String, String> dictionary) {
-        dictionary.remove(wordToDelete);
+    public void deleteWord(String enteredWord) {
+        englishDictionaryDao.deleteWord(enteredWord);
     }
 
     public void updateWord(String[] enteredWords, Map<String, String> dictionary) {

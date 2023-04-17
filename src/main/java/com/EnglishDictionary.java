@@ -1,6 +1,6 @@
 package com;
 
-import com.db.DictionaryController;
+import com.dataBase.DictionaryController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

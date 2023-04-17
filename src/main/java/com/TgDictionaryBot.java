@@ -1,8 +1,8 @@
 package com;
 
 
-import com.db.DictionaryController;
-import com.utill.DictionaryUtils;
+import com.dataBase.DictionaryController;
+import com.utill.DictionaryFunctions;
 import com.utill.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +52,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     @Autowired
     private WordUtils wordUtils;
     @Autowired
-    private DictionaryUtils dictionaryUtils;
+    private DictionaryFunctions dictionaryUtils;
     private Message message;
 
     @Override
@@ -68,9 +68,9 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
                 if (isEnglish) { //change this boolean in the future
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words, engToFrDictionary, frToEngDictionary);
+                        dictionaryUtils.addWord(words);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryUtils.deleteWord(words, engToFrDictionary);
+                        dictionaryUtils.deleteWord(words);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
                         dictionaryUtils.updateWord(words, engToFrDictionary);
                     } else if (wordUtils.isWordValid(text, ENGLISH_LETTERS)) {
@@ -80,9 +80,9 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words, frToEngDictionary, engToFrDictionary);
+                        dictionaryUtils.addWord(words);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryUtils.deleteWord(words, frToEngDictionary);
+                        dictionaryUtils.deleteWord(words);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
                         dictionaryUtils.updateWord(words, frToEngDictionary);
                     } else if (wordUtils.isWordValid(text, FRENCH_LETTERS)) {

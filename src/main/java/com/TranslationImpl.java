@@ -1,6 +1,6 @@
 package com;
 
-import com.db.DictionaryController;
+import com.dataBase.DictionaryController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +13,8 @@ public class TranslationImpl {
     @Autowired
     private FrenchDictionary frenchToEnglishDictionary;
 
-    public String translateEnglishToFrench(String frenchWord) {
-        return dictionaryController.getEnglishToFrenchTranslation(frenchWord);
+    public String translateEnglishToFrench(String englishWord) {
+        return dictionaryController.getEnglishToFrenchTranslation(englishWord);
     }
 
     public String translateFrenchToEnglish(String engWord) {

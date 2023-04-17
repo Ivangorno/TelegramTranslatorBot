@@ -1,4 +1,4 @@
-import com.db.DictionaryController;
+import com.dataBase.DictionaryController;
 import com.EnglishDictionary;
 import com.TgDictionaryBot;
 import org.junit.jupiter.api.Test;
