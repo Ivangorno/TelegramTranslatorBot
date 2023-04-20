@@ -61,18 +61,16 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
             message = update.getMessage();
             if (message.hasText()) {
                 String text = message.getText();
-                String[] words = wordUtils.parseEngToFreWord(text);
-                String dictionaryCommand = words[0];
-                Map<String, String> engToFrDictionary = dictionaryController.getEngToFrDictionary();
-                Map<String, String> frToEngDictionary = frenchToEnglishDictionary.getFrToEngDictionary();
+                String[] enteredText = wordUtils.parseEngToFreWord(text);
+                String dictionaryCommand = enteredText[0];
 
                 if (isEnglish) { //change this boolean in the future
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words);
+                        dictionaryUtils.addWord(enteredText);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryUtils.deleteWord(words);
+                        dictionaryUtils.deleteWord(enteredText);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
-                        dictionaryUtils.updateWord(words, engToFrDictionary);
+                        dictionaryUtils.updateWord(enteredText);
                     } else if (wordUtils.isWordValid(text, ENGLISH_LETTERS)) {
                         sendMessage(translation.translateEnglishToFrench(text));
                     } else {
@@ -80,11 +78,11 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryUtils.addWord(words);
+                        dictionaryUtils.addWord(enteredText);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryUtils.deleteWord(words);
+                        dictionaryUtils.deleteWord(enteredText);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
-                        dictionaryUtils.updateWord(words, frToEngDictionary);
+                        dictionaryUtils.updateWord(enteredText);
                     } else if (wordUtils.isWordValid(text, FRENCH_LETTERS)) {
                         sendMessage(translation.translateFrenchToEnglish(text));
                     } else {

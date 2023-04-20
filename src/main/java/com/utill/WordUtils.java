@@ -33,8 +33,7 @@ public class WordUtils {
         englishDictionaryDao.deleteWord(enteredWord);
     }
 
-    public void updateWord(String[] enteredWords, Map<String, String> dictionary) {
-        dictionary.computeIfPresent(
-                enteredWords[1], (wordToUpdate, newTranslation) -> wordToUpdate.replace(wordToUpdate, enteredWords[2]));
+    public void updateWord(String frenchTranslation, String englishWord) {
+        englishDictionaryDao.updateTranslation(frenchTranslation,englishWord );
     }
 }

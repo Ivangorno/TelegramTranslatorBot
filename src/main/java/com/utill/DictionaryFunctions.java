@@ -17,10 +17,13 @@ public class DictionaryFunctions {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
 
-    public void updateWord(String[] words, Map<String, String> dictionary) {
-        if (checkArrayOfEnteredWords.checkArray(words, 3)) {
-            wordUtils.updateWord(words, dictionary);
-            tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, words[1], words[2]));
+    public void updateWord(String[] enteredWords) {
+        if (checkArrayOfEnteredWords.checkArray(enteredWords, 3)) {
+            String englishWord = enteredWords[1];
+            String frenchTranslation = enteredWords[2];
+
+            wordUtils.updateWord(frenchTranslation, englishWord);
+            tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, enteredWords[1], enteredWords[2]));
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
