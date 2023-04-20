@@ -1,6 +1,6 @@
 package com.dataBase;
 
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -10,15 +10,10 @@ import java.sql.SQLException;
 @Component
 public class ConnectionCreator {
 
-    @Value("${dictionaryController.EngDictionaryUrl}")
-    private String englishDictionaryUrl ="jdbc:postgresql://localhost:5432/English_Dictionary";
 
-    @Value("${dictionaryController.EngDictionaryUserName}")
-    private String userName ="postgres";
-
-    @Value("${dictionaryController.EngDictionaryPassword}")
-    private String password ="postgres";
-
+    private String englishDictionaryUrl= "jdbc:postgresql://localhost:5432/English_Dictionary";
+    private String userName = "postgres";
+    private String password="postgres";
 
     private Connection connection;
     {

@@ -10,24 +10,24 @@ class WordUtilsTest {
 
     @Test
     void enteredLettersAreCorrect(){
-        WordUtils wordUtils = new WordUtils();
+        SpellCheck wordUtils = new SpellCheck();
         Assertions.assertTrue(wordUtils.isWordValid("Cat", ENGLISH_LETTERS));
     }
 
     @Test
     void enteredWrongLetters(){
-        WordUtils wordUtils = new WordUtils();
+        SpellCheck wordUtils = new SpellCheck();
          assertEquals(false, wordUtils.isWordValid("Кот", ENGLISH_LETTERS));
     }
     @Test
     void capsLockLettersShouldBeValid(){
-        WordUtils wordUtils = new WordUtils();
+        SpellCheck wordUtils = new SpellCheck();
         assertEquals(true, wordUtils.isWordValid("DOG", ENGLISH_LETTERS));
     }
 
     @Test
     void exclamationPointSymbolIsNotValid(){
-        WordUtils wordUtils = new WordUtils();
+        SpellCheck wordUtils = new SpellCheck();
         assertEquals(false, wordUtils.isWordValid("Cat!", ENGLISH_LETTERS));
     }
 }
