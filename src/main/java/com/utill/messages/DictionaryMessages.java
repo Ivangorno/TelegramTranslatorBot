@@ -2,9 +2,6 @@ package com.utill.messages;
 
 public class DictionaryMessages {
 
-        public final static String ENGLISH_DICTIONARY = "english";
-
-        public final static   String FRENCH_DICTIONARY = "french";
         public final static String ENTERED_NOT_CORRECT_ENGLISH_WORD = "ERROR: Incorrect English Word (or Dictionary Command) entered. Please enter an english word to translate";
         public final static String ENTERED_NOT_CORRECT_FRENCH_WORD = "ERROR: Incorrect French Word (or Dictionary Command) entered. Please enter an english word to translate";
         public final static String WORD_UPDATED_SUCCESSFULLY = "Word successfully updated: \"%s\" translates to \"%s\""; //reuse this logic to other messages.

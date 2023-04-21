@@ -64,7 +64,7 @@ public class DictionaryDao {
         try {
             Statement statement = connectionCreator.getConnection().createStatement();
             String SQL = String.format(
-                    "SELECT %s FROM %s_DICTIONARY WHERE LOWER(%s)= LOWER('%s')",
+                    "SELECT %s FROM %s_dictionary WHERE LOWER(%s)= LOWER('%s')",
                     translationLanguage, dictionaryType, columnLabel, enteredText);
 
             ResultSet resultSet = statement.executeQuery(SQL);
