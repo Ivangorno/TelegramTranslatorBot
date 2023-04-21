@@ -21,7 +21,7 @@ import static com.utill.AllowedLetters.*;
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
-    private boolean isEnglish = false; //delete this boolean in the future
+    private boolean isEnglish = true; //delete this boolean in the future
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
@@ -56,25 +56,25 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
                 if (isEnglish) { //change this boolean in the future
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryFunctions.addWord(enteredText);
+                        dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryFunctions.deleteWord(enteredText);
+                        dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
-                        dictionaryFunctions.updateWord(enteredText);
+                        dictionaryFunctions.updateWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, ENGLISH_LETTERS)) {
-                        sendMessage(dictionaryFunctions.translate(text));
+                        sendMessage(dictionaryFunctions.translate(text, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
                     } else {
                         sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                     }
                 } else {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryFunctions.addFrenchWord(enteredText);
+                        dictionaryFunctions.addWord(enteredText,FRENCH_DICTIONARY,ENGLISH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryFunctions.deleteFrenchWord(enteredText);
+                        dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
-                        dictionaryFunctions.updateFrenchWordTranslation(enteredText);
+                        dictionaryFunctions.updateWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, FRENCH_LETTERS)) {
-                        sendMessage(dictionaryFunctions.translateFrenchToEnglish(text));
+                        sendMessage(dictionaryFunctions.translate(text, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
                     } else {
                         sendMessage(ENTERED_NOT_CORRECT_FRENCH_WORD);
                     }
