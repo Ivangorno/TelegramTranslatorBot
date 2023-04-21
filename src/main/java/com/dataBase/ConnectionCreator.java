@@ -11,8 +11,8 @@ import java.sql.SQLException;
 public class ConnectionCreator {
 
 
-    private String englishDictionaryUrl= "jdbc:postgresql://localhost:5432/English_Dictionary";
-    private String userName = "postgres";
+    private String englishDictionaryUrl= "jdbc:postgresql://localhost:5432/TgBot_Dictionaries";
+    private String userName ="postgres";
     private String password="postgres";
 
     private Connection connection;
