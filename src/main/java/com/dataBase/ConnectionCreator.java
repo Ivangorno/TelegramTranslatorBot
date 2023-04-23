@@ -1,21 +1,27 @@
 package com.dataBase;
 
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-@Component
+@Configuration
 public class ConnectionCreator {
 
 
-    private String englishDictionaryUrl= "jdbc:postgresql://localhost:5432/TgBot_Dictionaries";
-    private String userName ="postgres";
-    private String password="postgres";
+    @Value("${connectionCreator.EnglishDictionaryUrl}")
+    private String englishDictionaryUrl;
+    @Value("${connectionCreator.EngDictionaryUserName}")
+    private String userName;
+    @Value("${connectionCreator.EngDictionaryPassword}")
+    private String password;
 
-    private Connection connection;
+    @Bean(name="connection")
+    public Connection createConnection()
     {
         try {
             Class.forName("org.postgresql.Driver");
@@ -23,18 +29,11 @@ public class ConnectionCreator {
             throw new RuntimeException(e);
         }
         try {
-            connection = DriverManager.getConnection(englishDictionaryUrl, userName, password);
+            return  DriverManager.getConnection(englishDictionaryUrl, userName, password);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
 
 }
