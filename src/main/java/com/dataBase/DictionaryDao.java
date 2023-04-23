@@ -1,8 +1,10 @@
 package com.dataBase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,11 +12,12 @@ import java.sql.Statement;
 public class DictionaryDao {
 
     @Autowired
-    private ConnectionCreator connectionCreator;
+    @Qualifier("connection")
+    private Connection connection;
 
     public void saveNewWord(String englishWord, String frenchWord, String primaryDictionary, String translationDictionary){
         try {
-            Statement statement = connectionCreator.getConnection().createStatement();
+            Statement statement = connection.createStatement();
 
             String SQL = String.format(
                     "INSERT INTO %s_dictionary VALUES('%s','%s'); " +
@@ -28,7 +31,7 @@ public class DictionaryDao {
 
     public void deleteWord(String wordToDelete, String primaryDictionary, String translationDictionary){
         try {
-            Statement statement = connectionCreator.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             String SQL = String.format(
                     "DELETE FROM %s_dictionary WHERE %s= '%s'; " +
                     "DELETE FROM %s_dictionary  WHERE %s= '%s'",
@@ -44,7 +47,7 @@ public class DictionaryDao {
         String translationLanguageColumn =translationDictionary;
 
         try {
-            Statement statement = connectionCreator.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             String SQL = String.format(
                     "UPDATE %s_dictionary SET %s= '%s' WHERE %s= '%s'; " +
                     "UPDATE %s_dictionary SET %s= '%s' WHERE %s= '%s' ",
@@ -62,7 +65,7 @@ public class DictionaryDao {
         String columnLabel = dictionaryType;
 
         try {
-            Statement statement = connectionCreator.getConnection().createStatement();
+            Statement statement = connection.createStatement();
             String SQL = String.format(
                     "SELECT %s FROM %s_dictionary WHERE LOWER(%s)= LOWER('%s')",
                     translationLanguage, dictionaryType, columnLabel, enteredText);
