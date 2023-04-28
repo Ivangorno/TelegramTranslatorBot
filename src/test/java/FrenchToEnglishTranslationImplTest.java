@@ -9,11 +9,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 @MockBean({
         TgDictionaryBot.class
 })
-class FrenchToEnglishTranslationImplTest {
-
-
-
-    @Autowired
-    private DictionaryController dictionaryController;
-
-    }
+class FrenchToEnglishTranslationImplTest {}

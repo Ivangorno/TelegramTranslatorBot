@@ -10,8 +10,13 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import static com.utill.messages.DictionaryCommands.*;
@@ -54,7 +59,12 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 String[] enteredText = spellCheck.parseToSeparateWords(text);
                 String dictionaryCommand = enteredText[0];
 
-                if (isEnglish) { //change this boolean in the future
+                if (text.contentEquals(CHANGE_LANGUAGE)) {
+                    dictionaryFunctions.changeTranslation(isEnglish);
+                    return;
+                }
+
+                if (isEnglish) {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
                         dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
@@ -86,11 +96,32 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     public void sendMessage(String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setText(text);
+        sendMessage.enableMarkdown(true);
         sendMessage.setChatId(message.getChatId());
+        setButtons(sendMessage);
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void setButtons(SendMessage sendMessage) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+
+        keyboardFirstRow.add(new KeyboardButton("/change language"));
+//        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
+
+        keyboardRowList.add(keyboardFirstRow);
+//        keyboardRowList.add(keyboardSecondRow); If you wanna add new row of buttons
+
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
     }
 }

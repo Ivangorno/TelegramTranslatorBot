@@ -5,6 +5,8 @@ import com.dataBase.DictionaryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.utill.messages.DictionaryCommands.ENGLISH_DICTIONARY;
+import static com.utill.messages.DictionaryCommands.FRENCH_DICTIONARY;
 import static com.utill.messages.DictionaryMessages.*;
 
 @Component
@@ -22,7 +24,7 @@ public class DictionaryFunctions {
             String wordToUpdate = enteredText[1];
             String newTranslation = enteredText[2];
 
-             dictionaryDao.updateTranslation(newTranslation, wordToUpdate, primaryDictionary, translationDictionary);
+            dictionaryDao.updateTranslation(newTranslation, wordToUpdate, primaryDictionary, translationDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
@@ -41,7 +43,7 @@ public class DictionaryFunctions {
         String englishWordToAdd = enteredText[2];
 
         if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
-             dictionaryDao.saveNewWord(frenchWordToAdd, englishWordToAdd, primaryDictionary, translationDictionary);
+            dictionaryDao.saveNewWord(frenchWordToAdd, englishWordToAdd, primaryDictionary, translationDictionary);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, frenchWordToAdd));
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
@@ -51,4 +53,12 @@ public class DictionaryFunctions {
         return dictionaryDao.getTranslation(enteredText, languageToTranslateTo, dictionaryType);
     }
 
+    public void changeTranslation(boolean isEnglish) {
+        isEnglish = !isEnglish;
+        if (isEnglish) {
+            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
+        } else {
+            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
+        }
+    }
 }
