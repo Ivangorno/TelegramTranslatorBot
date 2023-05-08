@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import static com.utill.messages.DictionaryCommands.*;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,27 +17,33 @@ public class DictionaryDao {
     @Qualifier("connection")
     private Connection connection;
 
-    public void saveNewWord(String englishWord, String frenchWord, String primaryDictionary, String translationDictionary){
+    public void saveNewWord(String englishWord, String frenchWord, String primaryDictionary){
         try {
             Statement statement = connection.createStatement();
+             String SQL;
 
-            String SQL = String.format(
-                    "INSERT INTO %s_dictionary VALUES('%s','%s'); " +
-                    "INSERT INTO %s_dictionary  VALUES('%s','%s')  ",
-                    primaryDictionary, englishWord, frenchWord, translationDictionary, frenchWord, englishWord);
+            if(primaryDictionary.equals( ENGLISH_DICTIONARY) ){
+                 SQL = String.format(INSERT_NEW_WORDS_INTO_DICTIONARY, englishWord,frenchWord, frenchWord,englishWord);
+            } else {
+                SQL = String.format(INSERT_NEW_WORDS_INTO_DICTIONARY, frenchWord,englishWord, englishWord,frenchWord);
+            }
             statement.execute(SQL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deleteWord(String wordToDelete, String primaryDictionary, String translationDictionary){
+    public void deleteWord(String wordToDelete, String primaryDictionary){
         try {
             Statement statement = connection.createStatement();
-            String SQL = String.format(
-                    "DELETE FROM %s_dictionary WHERE %s= '%s'; " +
-                    "DELETE FROM %s_dictionary  WHERE %s= '%s'",
-                    primaryDictionary, primaryDictionary, wordToDelete, translationDictionary,primaryDictionary,wordToDelete);
+            String SQL;
+            if(primaryDictionary.equals( ENGLISH_DICTIONARY) ) {
+                SQL = String.format(DELETE_ENGLISH_TO_FRENCH_TRANSLATION,
+                        primaryDictionary, wordToDelete, primaryDictionary, wordToDelete);
+            }else {
+                SQL = String.format(DELETE_FRENCH_TO_ENGLISH_TRANSLATION,
+                        primaryDictionary, wordToDelete, primaryDictionary, wordToDelete);
+            }
             statement.execute(SQL);
         } catch (SQLException e) {
             throw new RuntimeException(e);

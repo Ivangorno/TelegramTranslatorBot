@@ -26,7 +26,7 @@ import static com.utill.AllowedLetters.*;
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
 
-    private boolean isEnglish = true; //delete this boolean in the future
+//    private boolean isEnglish = true;
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
 
@@ -50,6 +50,9 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private DictionaryFunctions dictionaryFunctions;
     private Message message;
 
+    private boolean isEnglish = true;
+
+
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
@@ -60,15 +63,22 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 String dictionaryCommand = enteredText[0];
 
                 if (text.contentEquals(CHANGE_LANGUAGE)) {
-                    dictionaryFunctions.changeTranslation(isEnglish);
+                    isEnglish = !isEnglish;
+                    if (isEnglish) {
+                        sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
+                    } else {
+                        sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
+                    }
+
                     return;
+//                    dictionaryFunctions.changeTranslation(isEnglish);
                 }
 
                 if (isEnglish) {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
+                        dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
+                        dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
                         dictionaryFunctions.updateWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, ENGLISH_LETTERS)) {
@@ -78,9 +88,9 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                     }
                 } else {
                     if (dictionaryCommand.contentEquals(ADD_NEW_WORD)) {
-                        dictionaryFunctions.addWord(enteredText,FRENCH_DICTIONARY,ENGLISH_DICTIONARY);
+                        dictionaryFunctions.addWord(enteredText,FRENCH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
-                        dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
+                        dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY);
                     } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
                         dictionaryFunctions.updateWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, FRENCH_LETTERS)) {
@@ -116,6 +126,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         KeyboardRow keyboardFirstRow = new KeyboardRow();
 
         keyboardFirstRow.add(new KeyboardButton("/change language"));
+        keyboardFirstRow.add(new KeyboardButton("/add"));
 //        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
 
         keyboardRowList.add(keyboardFirstRow);

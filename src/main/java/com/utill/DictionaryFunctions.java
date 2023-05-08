@@ -19,6 +19,7 @@ public class DictionaryFunctions {
     private DictionaryDao dictionaryDao;
 
 
+
     public void updateWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
         if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
             String wordToUpdate = enteredText[1];
@@ -29,21 +30,21 @@ public class DictionaryFunctions {
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void deleteWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
+    public void deleteWord(String[] enteredText, String primaryDictionary) {
         String wordToDelete = enteredText[1];
 
         if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
-            dictionaryDao.deleteWord(wordToDelete, primaryDictionary, translationDictionary);
+            dictionaryDao.deleteWord(wordToDelete, primaryDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void addWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
+    public void addWord(String[] enteredText, String primaryDictionary) {
         String frenchWordToAdd = enteredText[1];
         String englishWordToAdd = enteredText[2];
 
         if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
-            dictionaryDao.saveNewWord(frenchWordToAdd, englishWordToAdd, primaryDictionary, translationDictionary);
+            dictionaryDao.saveNewWord(frenchWordToAdd, englishWordToAdd, primaryDictionary);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, frenchWordToAdd));
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
@@ -53,12 +54,14 @@ public class DictionaryFunctions {
         return dictionaryDao.getTranslation(enteredText, languageToTranslateTo, dictionaryType);
     }
 
-    public void changeTranslation(boolean isEnglish) {
-        isEnglish = !isEnglish;
-        if (isEnglish) {
-            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
-        } else {
-            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
-        }
-    }
+//    public void changeTranslation(boolean isEnglish) {
+//        isEnglish = !isEnglish;
+//        if (isEnglish == true) {
+//            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
+//        } else {
+//            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
+//        }
+//
+//    }
+
 }

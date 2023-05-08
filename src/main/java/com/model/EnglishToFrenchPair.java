@@ -19,6 +19,4 @@ public class EnglishToFrenchPair {
     @Column(name = "french")
     private  String frenchWord;
 
-
-
 }
