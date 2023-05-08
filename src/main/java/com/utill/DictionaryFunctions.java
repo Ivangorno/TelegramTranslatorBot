@@ -11,14 +11,13 @@ import static com.utill.messages.DictionaryMessages.*;
 
 @Component
 public class DictionaryFunctions {
+
     @Autowired
     private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
     private DictionaryDao dictionaryDao;
-
-
 
     public void updateWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
         if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
@@ -40,13 +39,13 @@ public class DictionaryFunctions {
     }
 
     public void addWord(String[] enteredText, String primaryDictionary) {
-        String frenchWordToAdd = enteredText[1];
-        String englishWordToAdd = enteredText[2];
+        String baseWord = enteredText[0];
+        String translationWord = enteredText[1];
 
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
-            dictionaryDao.saveNewWord(frenchWordToAdd, englishWordToAdd, primaryDictionary);
+        if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
+            dictionaryDao.saveNewWord(baseWord, translationWord, primaryDictionary);
 
-            tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, frenchWordToAdd));
+            tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
@@ -54,14 +53,13 @@ public class DictionaryFunctions {
         return dictionaryDao.getTranslation(enteredText, languageToTranslateTo, dictionaryType);
     }
 
-//    public void changeTranslation(boolean isEnglish) {
-//        isEnglish = !isEnglish;
-//        if (isEnglish == true) {
-//            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
-//        } else {
-//            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
-//        }
-//
-//    }
-
+    public boolean changeTranslation(boolean isEnglish) {
+        isEnglish = !isEnglish;
+        if (isEnglish) {
+            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
+        } else {
+            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
+        }
+        return isEnglish;
+    }
 }

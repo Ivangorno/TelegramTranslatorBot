@@ -1,12 +1,13 @@
 package com.utill.messages;
 
 public class DictionaryCommands {
-    public final static String ADD_NEW_WORD = "/add";
+    public final static String ADD_MODE = "Add mode";
+    public final static String CANCELED_ADD_MODE = "Cancel add mode";
     public final static String DELETE_WORD = "/del";
     public final static String UPDATE_WORD = "/upd";
     public final static String ENGLISH_DICTIONARY = "english";
     public final static String FRENCH_DICTIONARY = "french";
-    public final static String CHANGE_LANGUAGE = "/change language";
+    public final static String CHANGE_LANGUAGE = "Change language";
 
     public final static String INSERT_NEW_WORDS_INTO_DICTIONARY = "INSERT INTO english_dictionary VALUES('%s','%s');" +
                                                              "INSERT INTO french_dictionary  VALUES('%s','%s') ";
