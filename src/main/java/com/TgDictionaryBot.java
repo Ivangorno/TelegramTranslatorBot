@@ -1,7 +1,6 @@
 package com;
 
 
-import com.model.EnglishToFrenchPair;
 import com.utill.DictionaryFunctions;
 import com.utill.SpellCheck;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     private boolean isEnglish = true;
     private boolean isAddWordMode = false;
     private boolean isUpdateWordMode = false;
+    private boolean isDeleteWordMode = false;
 
 
     private static final Logger LOGGER = Logger.getLogger(TgDictionaryBot.class.getName());
@@ -63,21 +63,30 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 if (text.contentEquals(CHANGE_LANGUAGE)) {
                     isEnglish = dictionaryFunctions.changeTranslation(isEnglish);
                     return;
-                } else if (text.contentEquals(ADD_MODE)) {
-                    sendMessage("Now enter new word in format <english word> and <it's translation>");
+                } else if (text.contentEquals(ADD_WORD_MODE)) {
+                    sendMessage("Enter TEXT in format <base word> and <it's translation>");
                     isAddWordMode = true;
+                    isUpdateWordMode = false;
+                    isDeleteWordMode = false;
                     return;
-                } else if (text.contentEquals(CANCELED_ADD_MODE)) {
-                    sendMessage("Now you are in default mode");
+                } else if (text.contentEquals(DELETE_WORD_MODE)) {
+                    sendMessage("Enter a <word> to DELETE from translation library");
+                    isDeleteWordMode = true;
+                    isAddWordMode = false;
+                    isUpdateWordMode = false;
+                    return;
+                } else if (text.contentEquals(UPDATE_WORD_MODE)) {
+                    sendMessage("Enter TEXT in format <base word> and <it's new translation> ");
+                    isUpdateWordMode = true;
+                    isDeleteWordMode = false;
                     isAddWordMode = false;
                     return;
+
+                } else if (text.contentEquals(EXIT_TO_TRANSLATION_MODE)) {
+                    isAddWordMode = false;
+                    isUpdateWordMode = false;
+                    isDeleteWordMode = false;
                 }
-//                else if (text.contentEquals(UPDATE_MODE)) {
-//
-//                } else if (text.contentEquals(EXIT)) {
-//                isAddWordMode = false;
-//                isUpdateWordMode = false;
-//            }
 
                 String[] enteredText = spellCheck.parseToSeparateWords(text);
                 String dictionaryCommand = enteredText[0];
@@ -85,21 +94,24 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 if (isEnglish) {
                     if (isAddWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY);
-                    } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
+                    } else if (isDeleteWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY);
                     } else if (isUpdateWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.updateWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, ENGLISH_LETTERS)) {
                         sendMessage(dictionaryFunctions.translate(text, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
-                    } else {
+                    } else if (text.contentEquals(EXIT_TO_TRANSLATION_MODE)){
+                        sendMessage("You now in Translation Mode");
+                    }
+                    else {
                         sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
                     }
                 } else {
-                    if (dictionaryCommand.contentEquals(ADD_MODE)) {
-                        dictionaryFunctions.addWord(enteredText,FRENCH_DICTIONARY);
-                    } else if (dictionaryCommand.contentEquals(DELETE_WORD)) {
+                    if (isAddWordMode && !message.getFrom().getIsBot()) {
+                        dictionaryFunctions.addWord(enteredText, FRENCH_DICTIONARY);
+                    } else if (isDeleteWordMode && !message.getForwardFrom().getIsBot()) {
                         dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY);
-                    } else if (dictionaryCommand.contentEquals(UPDATE_WORD)) {
+                    } else if (isUpdateWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.updateWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, FRENCH_LETTERS)) {
                         sendMessage(dictionaryFunctions.translate(text, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
@@ -135,8 +147,11 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         KeyboardRow keyboardSecondRow = new KeyboardRow();
 
         keyboardFirstRow.add(new KeyboardButton(CHANGE_LANGUAGE));
-        keyboardFirstRow.add(new KeyboardButton(ADD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(CANCELED_ADD_MODE));
+        keyboardFirstRow.add(new KeyboardButton(ADD_WORD_MODE));
+        keyboardSecondRow.add(new KeyboardButton(DELETE_WORD_MODE));
+        keyboardSecondRow.add(new KeyboardButton(UPDATE_WORD_MODE));
+        keyboardSecondRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
+
 
 //        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
 

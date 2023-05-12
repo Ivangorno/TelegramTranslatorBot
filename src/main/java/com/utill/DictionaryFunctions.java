@@ -20,9 +20,9 @@ public class DictionaryFunctions {
     private DictionaryDao dictionaryDao;
 
     public void updateWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 3)) {
-            String wordToUpdate = enteredText[1];
-            String newTranslation = enteredText[2];
+        if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
+            String wordToUpdate = enteredText[0];
+            String newTranslation = enteredText[1];
 
             dictionaryDao.updateTranslation(newTranslation, wordToUpdate, primaryDictionary, translationDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
@@ -30,9 +30,9 @@ public class DictionaryFunctions {
     }
 
     public void deleteWord(String[] enteredText, String primaryDictionary) {
-        String wordToDelete = enteredText[1];
+        String wordToDelete = enteredText[0];
 
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
+        if (checkArrayOfEnteredWords.checkArray(enteredText, 1)) {
             dictionaryDao.deleteWord(wordToDelete, primaryDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
