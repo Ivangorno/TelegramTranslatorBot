@@ -14,9 +14,8 @@ import javax.persistence.*;
 public class EnglishToFrenchPair {
 
     @Column(name = "english")
-    private  String englishWord;
+    private String englishWord;
 
     @Column(name = "french")
     private  String frenchWord;
-
 }
