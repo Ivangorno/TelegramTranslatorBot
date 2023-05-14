@@ -61,7 +61,7 @@ public class DictionaryDao {
                     "UPDATE %s_dictionary SET %s= '%s' WHERE %s= '%s' ",
 
             primaryDictionary, translationDictionary,newTranslation,primaryLanguageColumn,wordToUpdate,
-            translationDictionary,translationLanguageColumn, newTranslation, translationLanguageColumn, newTranslation );
+            translationDictionary,translationLanguageColumn, wordToUpdate, translationLanguageColumn, newTranslation );
 
             statement.execute(SQL);
         } catch (SQLException e) {

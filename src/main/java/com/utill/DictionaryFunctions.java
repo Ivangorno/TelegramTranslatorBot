@@ -26,6 +26,8 @@ public class DictionaryFunctions {
 
             dictionaryDao.updateTranslation(newTranslation, wordToUpdate, primaryDictionary, translationDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
+            tgDictionaryBot.sendMessage("Enter another word to UPDATE it's translation");
+
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
@@ -35,6 +37,8 @@ public class DictionaryFunctions {
         if (checkArrayOfEnteredWords.checkArray(enteredText, 1)) {
             dictionaryDao.deleteWord(wordToDelete, primaryDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
+            tgDictionaryBot.sendMessage("Enter another word to DELETE from the dictionary");
+
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
@@ -46,6 +50,7 @@ public class DictionaryFunctions {
             dictionaryDao.saveNewWord(baseWord, translationWord, primaryDictionary);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
+            tgDictionaryBot.sendMessage("Enter another word to ADD to the dictionary");
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 

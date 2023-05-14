@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -109,14 +112,15 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 } else {
                     if (isAddWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.addWord(enteredText, FRENCH_DICTIONARY);
-                    } else if (isDeleteWordMode && !message.getForwardFrom().getIsBot()) {
+                    } else if (isDeleteWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY);
                     } else if (isUpdateWordMode && !message.getFrom().getIsBot()) {
                         dictionaryFunctions.updateWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
                     } else if (spellCheck.isWordValid(text, FRENCH_LETTERS)) {
                         sendMessage(dictionaryFunctions.translate(text, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
-                    } else {
-                        sendMessage(ENTERED_NOT_CORRECT_FRENCH_WORD);
+                    } else if (text.contentEquals(EXIT_TO_TRANSLATION_MODE)){
+                        sendMessage("You now in Translation Mode");
+                    } else {sendMessage(ENTERED_NOT_CORRECT_FRENCH_WORD);
                     }
                 }
             }
@@ -147,10 +151,10 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         KeyboardRow keyboardSecondRow = new KeyboardRow();
 
         keyboardFirstRow.add(new KeyboardButton(CHANGE_LANGUAGE));
-        keyboardFirstRow.add(new KeyboardButton(ADD_WORD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(DELETE_WORD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(UPDATE_WORD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
+        keyboardFirstRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
+//        keyboardSecondRow.add(new KeyboardButton(DELETE_WORD_MODE));
+//        keyboardSecondRow.add(new KeyboardButton(UPDATE_WORD_MODE));
+//        keyboardSecondRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
 
 
 //        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
@@ -161,5 +165,18 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
         replyKeyboardMarkup.setKeyboard(keyboardRowList);
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
+    }
+
+    public  TgDictionaryBot() {
+        List<BotCommand> listOfCommands = new ArrayList<>();
+        listOfCommands.add(new BotCommand("/add_mode", "add new word to the dictionary"));
+        listOfCommands.add(new BotCommand("/delete_mode", "delete a word from the dictionary"));
+        listOfCommands.add(new BotCommand("/update_mode", "update translation of a word in the dictionary"));
+
+        try {
+            this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }

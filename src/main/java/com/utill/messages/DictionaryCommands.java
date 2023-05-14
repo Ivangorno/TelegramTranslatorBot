@@ -1,10 +1,9 @@
 package com.utill.messages;
 
 public class DictionaryCommands {
-    public final static String ADD_WORD_MODE = "Add mode";
-    public final static String CANCELED_ADD_MODE = "Cancel ADD_MODE";
-    public final static String DELETE_WORD_MODE = "Delete mode";
-    public final static String UPDATE_WORD_MODE = "Update mode";
+    public final static String ADD_WORD_MODE = "/add_mode";
+    public final static String DELETE_WORD_MODE = "/delete_mode";
+    public final static String UPDATE_WORD_MODE = "/update_mode";
     public final static String EXIT_TO_TRANSLATION_MODE = "Exit To Translation";
     public final static String ENGLISH_DICTIONARY = "english";
     public final static String FRENCH_DICTIONARY = "french";
