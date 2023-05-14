@@ -13,14 +13,12 @@ import static com.utill.messages.DictionaryMessages.*;
 public class DictionaryFunctions {
 
     @Autowired
-    private CheckArrayOfEnteredWords checkArrayOfEnteredWords;
-    @Autowired
     private TgDictionaryBot tgDictionaryBot;
     @Autowired
     private DictionaryDao dictionaryDao;
 
     public void updateWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
+        if (enteredText.length == 2) {
             String wordToUpdate = enteredText[0];
             String newTranslation = enteredText[1];
 
@@ -34,7 +32,7 @@ public class DictionaryFunctions {
     public void deleteWord(String[] enteredText, String primaryDictionary) {
         String wordToDelete = enteredText[0];
 
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 1)) {
+        if (enteredText.length == 1) {
             dictionaryDao.deleteWord(wordToDelete, primaryDictionary);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
             tgDictionaryBot.sendMessage("Enter another word to DELETE from the dictionary");
@@ -46,7 +44,7 @@ public class DictionaryFunctions {
         String baseWord = enteredText[0];
         String translationWord = enteredText[1];
 
-        if (checkArrayOfEnteredWords.checkArray(enteredText, 2)) {
+        if (enteredText.length == 2) {
             dictionaryDao.saveNewWord(baseWord, translationWord, primaryDictionary);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
@@ -56,15 +54,5 @@ public class DictionaryFunctions {
 
     public String translate(String enteredText, String languageToTranslateTo, String dictionaryType){
         return dictionaryDao.getTranslation(enteredText, languageToTranslateTo, dictionaryType);
-    }
-
-    public boolean changeTranslation(boolean isEnglish) {
-        isEnglish = !isEnglish;
-        if (isEnglish) {
-            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
-        } else {
-            tgDictionaryBot.sendMessage(String.format(CURRENT_LANGUAGE_PAIR, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
-        }
-        return isEnglish;
     }
 }
