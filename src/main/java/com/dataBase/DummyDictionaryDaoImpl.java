@@ -14,6 +14,7 @@ import java.util.Map;
 public class DummyDictionaryDaoImpl implements DictionaryDao {
 
     private Map<String, String> dummyDB = new HashMap<>();
+
     {
         dummyDB.put("Mother", "Mère");
         dummyDB.put("Father", "Père");
@@ -25,15 +26,15 @@ public class DummyDictionaryDaoImpl implements DictionaryDao {
         dummyDB.put(englishWord, frenchWord);
     }
 
-    public void deleteWord(String wordToDelete, String primaryDictionary){
+    public void deleteWord(String wordToDelete) {
         dummyDB.remove(wordToDelete);
     }
 
-    public void updateTranslation(String newTranslation, String wordToUpdate,  String primaryDictionary, String translationDictionary){
+    public void updateTranslation(String newTranslation, String wordToUpdate) {
         dummyDB.put(wordToUpdate, newTranslation);
     }
 
-    public String getTranslation(String enteredText, String translationLanguage, String dictionaryType) {
+    public String getTranslation(String enteredText) {
         return dummyDB.get(enteredText);
     }
 }

@@ -41,11 +41,11 @@ public class DictionaryFunctionsTest {
 //        testArrayOfWords[2] = "Test";
 
         //when
-        dictionaryFunctions.updateWord(testArrayOfWords, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
+        dictionaryFunctions.updateWord(testArrayOfWords);
 
         //then
         verify(tgDictionaryBot, times(2)).sendMessage(any());
-        verify(dictionaryDao, times(1)).updateTranslation(any(), any(), any(), any());
+        verify(dictionaryDao, times(1)).updateTranslation(any(), any());
     }
 
 }

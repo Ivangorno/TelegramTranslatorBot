@@ -7,9 +7,9 @@ public interface DictionaryDao {
 
     void saveNewWord(String englishWord, String frenchWord);
 
-    void deleteWord(String wordToDelete, String primaryDictionary);
+    void deleteWord(String wordToDelete);
 
-    void updateTranslation(String newTranslation, String wordToUpdate,  String primaryDictionary, String translationDictionary);
+    void updateTranslation(String newTranslation, String wordToUpdate);
 
-    String getTranslation(String enteredText, String translationLanguage, String dictionaryType);
+    String getTranslation(String enteredText);
 }

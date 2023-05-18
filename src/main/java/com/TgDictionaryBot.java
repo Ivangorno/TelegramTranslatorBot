@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -74,30 +71,16 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
             boolean isBot = !message.getFrom().getIsBot();
 
-            if (modeSelector.isEnglish()) {
-                if (modeSelector.isAddWordMode() && isBot) {
-                    dictionaryFunctions.addWord(enteredText);
-                } else if (modeSelector.isDeleteWordMode() && isBot) {
-                    dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY);
-                } else if (modeSelector.isUpdateWordMode() && isBot) {
-                    dictionaryFunctions.updateWord(enteredText, ENGLISH_DICTIONARY, FRENCH_DICTIONARY);
-                } else if (spellCheck.isWordValid(text, ENGLISH_LETTERS)) {
-                    sendMessage(dictionaryFunctions.translate(text, FRENCH_DICTIONARY, ENGLISH_DICTIONARY));
-                } else {
-                    sendMessage(ENTERED_NOT_CORRECT_ENGLISH_WORD);
-                }
+            if (modeSelector.isAddWordMode() && isBot) {
+                dictionaryFunctions.addWord(enteredText);
+            } else if (modeSelector.isDeleteWordMode() && isBot) {
+                dictionaryFunctions.deleteWord(enteredText);
+            } else if (modeSelector.isUpdateWordMode() && isBot) {
+                dictionaryFunctions.updateWord(enteredText);
+            } else if (spellCheck.isWordValid(text)) {
+                sendMessage(dictionaryFunctions.translate(text));
             } else {
-                if (modeSelector.isAddWordMode() && isBot) {
-                    dictionaryFunctions.addWord(enteredText);
-                } else if (modeSelector.isDeleteWordMode() && isBot) {
-                    dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY);
-                } else if (modeSelector.isUpdateWordMode() && isBot) {
-                    dictionaryFunctions.updateWord(enteredText, FRENCH_DICTIONARY, ENGLISH_DICTIONARY);
-                } else if (spellCheck.isWordValid(text, FRENCH_LETTERS)) {
-                    sendMessage(dictionaryFunctions.translate(text, ENGLISH_DICTIONARY, FRENCH_DICTIONARY));
-                } else {
-                    sendMessage(ENTERED_NOT_CORRECT_FRENCH_WORD);
-                }
+                sendMessage(INCORRECT_WORD_ENTERED);
             }
         }
     }
@@ -128,9 +111,6 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
         keyboardFirstRow.add(new KeyboardButton(CHANGE_LANGUAGE));
         keyboardFirstRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
-        keyboardSecondRow.add(new KeyboardButton(DELETE_WORD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(UPDATE_WORD_MODE));
-        keyboardSecondRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
 
 
 //        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
@@ -143,7 +123,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
     }
 
-    public  TgDictionaryBot() {
+    public TgDictionaryBot() {
 //        List<BotCommand> listOfCommands = new ArrayList<>();
 //        listOfCommands.add(new BotCommand("/add_mode", "add new word to the dictionary"));
 //        listOfCommands.add(new BotCommand("/delete_mode", "delete a word from the dictionary"));

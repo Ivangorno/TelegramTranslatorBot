@@ -5,8 +5,7 @@ import com.dataBase.DictionaryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import static com.utill.messages.DictionaryCommands.ENGLISH_DICTIONARY;
-import static com.utill.messages.DictionaryCommands.FRENCH_DICTIONARY;
+import static com.utill.messages.DictionaryCommands.*;
 import static com.utill.messages.DictionaryMessages.*;
 
 @Component
@@ -17,25 +16,25 @@ public class DictionaryFunctions {
     @Autowired
     private DictionaryDao dictionaryDao;
 
-    public void updateWord(String[] enteredText, String primaryDictionary, String translationDictionary) {
+    public void updateWord(String[] enteredText) {
         if (enteredText.length == 2) {
             String wordToUpdate = enteredText[0];
             String newTranslation = enteredText[1];
 
-            dictionaryDao.updateTranslation(newTranslation, wordToUpdate, primaryDictionary, translationDictionary);
+            dictionaryDao.updateTranslation(newTranslation, wordToUpdate);
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
-            tgDictionaryBot.sendMessage("Enter another word to UPDATE it's translation");
+            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_UPDATE);
 
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void deleteWord(String[] enteredText, String primaryDictionary) {
+    public void deleteWord(String[] enteredText) {
         String wordToDelete = enteredText[0];
 
         if (enteredText.length == 1) {
-            dictionaryDao.deleteWord(wordToDelete, primaryDictionary);
+            dictionaryDao.deleteWord(wordToDelete);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
-            tgDictionaryBot.sendMessage("Enter another word to DELETE from the dictionary");
+            tgDictionaryBot.sendMessage(ENTER_ANOTHER_WORD_TO_DELETE);
 
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
@@ -48,11 +47,11 @@ public class DictionaryFunctions {
             dictionaryDao.saveNewWord(baseWord, translationWord);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
-            tgDictionaryBot.sendMessage("Enter another word to ADD to the dictionary");
+            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_ADD);
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public String translate(String enteredText, String languageToTranslateTo, String dictionaryType){
-        return dictionaryDao.getTranslation(enteredText, languageToTranslateTo, dictionaryType);
+    public String translate(String enteredText) {
+        return dictionaryDao.getTranslation(enteredText);
     }
 }
