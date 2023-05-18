@@ -21,7 +21,7 @@ public class DummyDictionaryDaoImpl implements DictionaryDao {
     }
 
 
-    public void saveNewWord(String englishWord, String frenchWord, String primaryDictionary) {
+    public void saveNewWord(String englishWord, String frenchWord) {
         dummyDB.put(englishWord, frenchWord);
     }
 

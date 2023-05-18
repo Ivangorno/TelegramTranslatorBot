@@ -1,8 +1,11 @@
 package com.dataBase;
 
+import org.springframework.stereotype.Component;
+
+
 public interface DictionaryDao {
 
-    void saveNewWord(String englishWord, String frenchWord, String primaryDictionary);
+    void saveNewWord(String englishWord, String frenchWord);
 
     void deleteWord(String wordToDelete, String primaryDictionary);
 

@@ -40,12 +40,12 @@ public class DictionaryFunctions {
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void addWord(String[] enteredText, String primaryDictionary) {
+    public void addWord(String[] enteredText) {
         String baseWord = enteredText[0];
         String translationWord = enteredText[1];
 
         if (enteredText.length == 2) {
-            dictionaryDao.saveNewWord(baseWord, translationWord, primaryDictionary);
+            dictionaryDao.saveNewWord(baseWord, translationWord);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
             tgDictionaryBot.sendMessage("Enter another word to ADD to the dictionary");

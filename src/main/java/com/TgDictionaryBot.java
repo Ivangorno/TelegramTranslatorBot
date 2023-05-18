@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
@@ -73,7 +76,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
             if (modeSelector.isEnglish()) {
                 if (modeSelector.isAddWordMode() && isBot) {
-                    dictionaryFunctions.addWord(enteredText, ENGLISH_DICTIONARY);
+                    dictionaryFunctions.addWord(enteredText);
                 } else if (modeSelector.isDeleteWordMode() && isBot) {
                     dictionaryFunctions.deleteWord(enteredText, ENGLISH_DICTIONARY);
                 } else if (modeSelector.isUpdateWordMode() && isBot) {
@@ -85,7 +88,7 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
                 }
             } else {
                 if (modeSelector.isAddWordMode() && isBot) {
-                    dictionaryFunctions.addWord(enteredText, FRENCH_DICTIONARY);
+                    dictionaryFunctions.addWord(enteredText);
                 } else if (modeSelector.isDeleteWordMode() && isBot) {
                     dictionaryFunctions.deleteWord(enteredText, FRENCH_DICTIONARY);
                 } else if (modeSelector.isUpdateWordMode() && isBot) {
