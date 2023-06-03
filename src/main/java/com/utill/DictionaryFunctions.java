@@ -29,9 +29,10 @@ public class DictionaryFunctions {
     }
 
     public void deleteWord(String[] enteredText) {
-        String wordToDelete = enteredText[0];
 
         if (enteredText.length == 1) {
+            String wordToDelete = enteredText[0];
+
             dictionaryDao.deleteWord(wordToDelete);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
             tgDictionaryBot.sendMessage(ENTER_ANOTHER_WORD_TO_DELETE);
@@ -40,10 +41,10 @@ public class DictionaryFunctions {
     }
 
     public void addWord(String[] enteredText) {
-        String baseWord = enteredText[0];
-        String translationWord = enteredText[1];
 
         if (enteredText.length == 2) {
+            String baseWord = enteredText[0];
+            String translationWord = enteredText[1];
             dictionaryDao.saveNewWord(baseWord, translationWord);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
@@ -52,6 +53,6 @@ public class DictionaryFunctions {
     }
 
     public String translate(String enteredText) {
-        return dictionaryDao.getTranslation(enteredText);
+             return dictionaryDao.getTranslation(enteredText);
     }
 }

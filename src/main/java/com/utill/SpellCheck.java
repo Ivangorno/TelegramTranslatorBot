@@ -18,8 +18,12 @@ public class SpellCheck {
     }
 
     private Set<Character> allowedLetters;
+    private Set<Character> allowedLetters2;
+    private Set<Character> allowedLetters3;
+
 
     public boolean isWordValid(String enteredWord) {
+
         if (activeLanguage.isEnglish()) {
             allowedLetters = ENGLISH_LETTERS;
         } else {
