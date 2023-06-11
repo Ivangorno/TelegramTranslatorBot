@@ -3,13 +3,14 @@ package com.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity
+@Component
 @Table(name = "ENGLISH_DICTIONARY")
 public class EnglishToFrenchPair {
 

@@ -2,13 +2,16 @@ package com;
 
 
 import com.utill.DictionaryFunctions;
+import com.utill.OperationsWithDocuments;
 import com.utill.ModeSelector;
 import com.utill.SpellCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Document;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -16,13 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static com.utill.messages.DictionaryCommands.*;
 import static com.utill.messages.DictionaryMessages.*;
-import static com.utill.AllowedLetters.*;
 
 @Component
 public class TgDictionaryBot extends TelegramLongPollingBot {
@@ -44,6 +47,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
     @Value("${tgDictionary.BotUserName}")
     private String botUsername;
+    @Autowired
+    private OperationsWithDocuments documents;
 
     @Autowired
     private SpellCheck spellCheck;
@@ -60,30 +65,38 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             message = update.getMessage();
-            String text = message.getText();
 
-            if (ALL_COMMANDS.contains(text)) {
-                modeSelector.changeMode(text);
-                return;
+            if(message.hasDocument()){
+                documents.saveFile(update);
             }
 
-            String[] enteredText = spellCheck.parseToSeparateWords(text);
+            if (message.hasText()) {
+                String text = message.getText();
 
-            boolean isBot = !message.getFrom().getIsBot();
+                if (ALL_COMMANDS.contains(text)) {
+                    modeSelector.changeMode(text);
+                    return;
+                }
 
-            if (modeSelector.isAddWordMode() && isBot) {
-                dictionaryFunctions.addWord(enteredText);
-            } else if (modeSelector.isDeleteWordMode() && isBot) {
-                dictionaryFunctions.deleteWord(enteredText);
-            } else if (modeSelector.isUpdateWordMode() && isBot) {
-                dictionaryFunctions.updateWord(enteredText);
-            } else if (spellCheck.isWordValid(text)) {
-                sendMessage(dictionaryFunctions.translate(text));
-            } else {
-                sendMessage(INCORRECT_WORD_ENTERED);
+                String[] enteredText = spellCheck.parseToSeparateWords(text);
+
+                boolean isBot = !message.getFrom().getIsBot();
+
+                if (modeSelector.isAddWordMode() && isBot) {
+                    dictionaryFunctions.addWord(enteredText);
+                } else if (modeSelector.isDeleteWordMode() && isBot) {
+                    dictionaryFunctions.deleteWord(enteredText);
+                } else if (modeSelector.isUpdateWordMode() && isBot) {
+                    dictionaryFunctions.updateWord(enteredText);
+                } else if (spellCheck.isWordValid(text)) {
+                    sendMessage(dictionaryFunctions.translate(text));
+                } else {
+                    sendMessage(INCORRECT_WORD_ENTERED);
+                }
             }
         }
     }
+
 
 
     public void sendMessage(String text) {
