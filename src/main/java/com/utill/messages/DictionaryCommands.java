@@ -21,8 +21,8 @@ public class DictionaryCommands {
     public final static String TRANSLATE_FRENCH_TO_ENGLISH_COMMAND = "SELECT english FROM french_dictionary WHERE LOWER(french)= LOWER('%s')";
     public final static String INSERT_NEW_ENGLISH_WORD_AND_TRANSLATION_INTO_DICTIONARY = "INSERT INTO english_dictionary VALUES('%s','%s');";
     public final static String INSERT_NEW_FRENCH_WORD_AND_TRANSLATION_INTO_DICTIONARY = "INSERT INTO french_dictionary VALUES('%s','%s');";
-    public final static String DELETE_ENGLISH_TO_FRENCH_TRANSLATION = "DELETE FROM english_dictionary WHERE LOWER(english)= '%1$s'; DELETE FROM french_dictionary  WHERE LOWER(english)= '%1$s'";
-    public final static String DELETE_FRENCH_TO_ENGLISH_TRANSLATION = "DELETE FROM french_dictionary WHERE LOWER(french)= '%1$s'; DELETE FROM english_dictionary  WHERE LOWER(french)= '%1$s'";
+    public final static String DELETE_ENGLISH_TO_FRENCH_TRANSLATION = "DELETE FROM english_dictionary WHERE (english)= '%1$s'; DELETE FROM french_dictionary  WHERE (english)= '%1$s'";
+    public final static String DELETE_FRENCH_TO_ENGLISH_TRANSLATION = "DELETE FROM french_dictionary WHERE (french)= '%1$s'; DELETE FROM english_dictionary  WHERE (french)= '%1$s'";
 
     public final static String UPDATE_FRENCH_TRANSLATION_TO_ENGLISH_WORD =
             "UPDATE english_dictionary SET french= '%1$s' WHERE english= '%2$s'; " +
