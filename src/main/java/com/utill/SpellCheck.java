@@ -2,6 +2,7 @@ package com.utill;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
@@ -18,9 +19,6 @@ public class SpellCheck {
     }
 
     private Set<Character> allowedLetters;
-    private Set<Character> allowedLetters2;
-    private Set<Character> allowedLetters3;
-
 
     public boolean isWordValid(String enteredWord) {
 
@@ -36,6 +34,20 @@ public class SpellCheck {
             }
         }
         return true;
+    }
+
+    public String capitalizeText(String enteredText){
+      return   StringUtils.capitalize(enteredText);
+    }
+
+    public String toCorrectCapitalization(String str){
+        String output = "";
+
+        for (int i=0; i < str.length(); i++ ){
+         output = str.substring(0,1).toUpperCase() + str.substring(1).toLowerCase();
+        }
+
+        return output;
     }
 
 }

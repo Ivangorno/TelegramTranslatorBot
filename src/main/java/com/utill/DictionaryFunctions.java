@@ -16,10 +16,13 @@ public class DictionaryFunctions {
     @Autowired
     private DictionaryDao dictionaryDao;
 
+    @Autowired
+    private SpellCheck editString;
+
     public void updateWord(String[] enteredText) {
         if (enteredText.length == 2) {
-            String wordToUpdate = enteredText[0];
-            String newTranslation = enteredText[1];
+            String wordToUpdate = editString.toCorrectCapitalization(enteredText[0]);
+            String newTranslation = editString.toCorrectCapitalization(enteredText[1]);
 
             dictionaryDao.updateTranslation(newTranslation, wordToUpdate);
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
@@ -31,7 +34,7 @@ public class DictionaryFunctions {
     public void deleteWord(String[] enteredText) {
 
         if (enteredText.length == 1) {
-            String wordToDelete = enteredText[0];
+            String wordToDelete = editString.toCorrectCapitalization(enteredText[0]);
 
             dictionaryDao.deleteWord(wordToDelete);
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
@@ -43,8 +46,8 @@ public class DictionaryFunctions {
     public void addWord(String[] enteredText) {
 
         if (enteredText.length == 2) {
-            String baseWord = enteredText[0];
-            String translationWord = enteredText[1];
+            String baseWord = editString.toCorrectCapitalization(enteredText[0]);
+            String translationWord = editString.toCorrectCapitalization(enteredText[1]);
             dictionaryDao.saveNewWord(baseWord, translationWord);
 
             tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
