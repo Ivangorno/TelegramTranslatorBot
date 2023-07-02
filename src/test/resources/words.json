@@ -1,0 +1,25 @@
+{
+   "add":
+  [
+    {"Where":"Ou"},
+    {"Turn":"Tourner"},
+    {"Stop":"Arretez"},
+    {"Call":"Appelez"}
+  ],
+
+   "update":
+  [
+    {"Where":"Taxi"},
+    {"Turn":"Taxi2"},
+    {"Stop":"Taxi3"},
+    {"Call":"Taxi4"}
+  ],
+
+   "delete":
+    [
+      "Where",
+      "Stop",
+      "Call"
+    ]
+
+}

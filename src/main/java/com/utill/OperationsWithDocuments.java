@@ -24,7 +24,6 @@ public class OperationsWithDocuments {
     private DictionaryFunctions dictionaryFunctions;
 
     public void saveFile(Update update) {
-
         String fileName = update.getMessage().getDocument().getFileName();
         Document document = update.getMessage().getDocument();
         GetFile getFile = new GetFile();
@@ -75,11 +74,11 @@ public class OperationsWithDocuments {
         JSONArray addWordsFromJson = jsonObject.getJSONArray("update");
         for (int i = 0; i < addWordsFromJson.length(); i++) {
             Map<String, Object> pair = addWordsFromJson.getJSONObject(i).toMap();
-            dictionaryFunctions.addWord(collectWordsFromMap(pair));
+            dictionaryFunctions.updateWord(collectWordsFromMap(pair));
         }
     }
 
-    private static JSONObject parseJson(File file) {
+    public static JSONObject parseJson(File file) {
         String text;
         try {
             text = Files.readString(file.toPath());

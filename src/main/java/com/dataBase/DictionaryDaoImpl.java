@@ -26,6 +26,8 @@ public class DictionaryDaoImpl implements DictionaryDao {
     private String sqlCommand1;
     private String sqlCommand2;
 
+
+    //TODO investigate why program is crushing when same word is exist in DB
     public void saveNewWord(String englishWord, String frenchWord) {
         try {
             Statement statement = connection.createStatement();
