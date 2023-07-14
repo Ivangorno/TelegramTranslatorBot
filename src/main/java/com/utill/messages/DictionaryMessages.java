@@ -10,4 +10,6 @@ public class DictionaryMessages {
     public final static String ADD_WORD_COMMAND_ENTERED_INCORRECTLY = "ERROR: Enter \"/add\" command and TWO WORDS to add a new word to the dictionary";
     public final static String CURRENT_LANGUAGE_PAIR = "Now you are translating from %s to %s";
 
+    public final static String  WORD_ALREADY_EXISTS_IN_DATABASE = "Word \"%s\" already exist in DB";
+
 }

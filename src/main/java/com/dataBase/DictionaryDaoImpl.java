@@ -1,5 +1,6 @@
 package com.dataBase;
 
+import com.TgDictionaryBot;
 import com.utill.ModeSelector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import static com.utill.messages.DictionaryCommands.*;
+import static com.utill.messages.DictionaryMessages.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,34 +24,48 @@ public class DictionaryDaoImpl implements DictionaryDao {
     private Connection connection;
 
     @Autowired
+    private TgDictionaryBot tgDictionaryBot;
+
+    @Autowired
     ModeSelector languageOfDictionary;
     private String sqlCommand1;
     private String sqlCommand2;
 
 
-    //TODO investigate why program is crushing when same word is exist in DB
-    public void saveNewWord(String englishWord, String frenchWord) {
+    //TODO add error massage if trying to delete or update words that do not exist in DB
+    public void saveNewWord(String englishWord, String frenchWord)  {
+        String wordsAlreadyExistInDB = null;
+        String successfullyAddedWord ;
+
         try {
             Statement statement = connection.createStatement();
 
             if (languageOfDictionary.isEnglish()) {
                 sqlCommand1 = String.format(INSERT_NEW_ENGLISH_WORD_AND_TRANSLATION_INTO_DICTIONARY, englishWord, frenchWord);
                 sqlCommand2 = String.format(INSERT_NEW_FRENCH_WORD_AND_TRANSLATION_INTO_DICTIONARY, frenchWord, englishWord);
+                wordsAlreadyExistInDB = String.format(WORD_ALREADY_EXISTS_IN_DATABASE, englishWord);
+                successfullyAddedWord = englishWord;
             } else {
                 sqlCommand1 = String.format(INSERT_NEW_FRENCH_WORD_AND_TRANSLATION_INTO_DICTIONARY, frenchWord, englishWord);
                 sqlCommand2 = String.format(INSERT_NEW_ENGLISH_WORD_AND_TRANSLATION_INTO_DICTIONARY, englishWord, frenchWord);
+                wordsAlreadyExistInDB = String.format(WORD_ALREADY_EXISTS_IN_DATABASE, frenchWord);
+                successfullyAddedWord = frenchWord;
             }
             statement.execute(sqlCommand1);
             statement.execute(sqlCommand2);
+
+            tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, successfullyAddedWord));
+
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            tgDictionaryBot.sendMessage(wordsAlreadyExistInDB);
         }
     }
 
-    public void deleteWord(String wordToDelete) {
+    public void deleteWord(String wordToDelete)  {
+
         try {
             Statement statement = connection.createStatement();
-
 
             if (languageOfDictionary.isEnglish()) {
                 sqlCommand1 = String.format(DELETE_ENGLISH_TO_FRENCH_TRANSLATION, wordToDelete);
@@ -61,12 +77,17 @@ public class DictionaryDaoImpl implements DictionaryDao {
             }
             statement.execute(sqlCommand1);
             statement.execute(sqlCommand2);
+
+            tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void updateTranslation(String newTranslation, String wordToUpdate) {
+    public void updateTranslation(String newTranslation, String wordToUpdate)  {
+
 
         try {
             Statement statement = connection.createStatement();
@@ -75,8 +96,12 @@ public class DictionaryDaoImpl implements DictionaryDao {
 
             statement.execute(sqlCommand1);
             statement.execute(sqlCommand2);
+
+            tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
+            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_UPDATE);
+
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            tgDictionaryBot.sendMessage("word is not in DB");
         }
     }
 

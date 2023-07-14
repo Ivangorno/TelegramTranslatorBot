@@ -25,8 +25,6 @@ public class DictionaryFunctions {
             String newTranslation = editString.toCorrectCapitalization(enteredText[1]);
 
             dictionaryDao.updateTranslation(newTranslation, wordToUpdate);
-            tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
-            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_UPDATE);
 
         } else tgDictionaryBot.sendMessage(UPDATE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
@@ -37,21 +35,17 @@ public class DictionaryFunctions {
             String wordToDelete = editString.toCorrectCapitalization(enteredText[0]);
 
             dictionaryDao.deleteWord(wordToDelete);
-            tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
-            tgDictionaryBot.sendMessage(ENTER_ANOTHER_WORD_TO_DELETE);
 
         } else tgDictionaryBot.sendMessage(DELETE_A_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 
-    public void addWord(String[] enteredText) {
+    public void addWord(String[] enteredText)  {
 
         if (enteredText.length == 2) {
             String baseWord = editString.toCorrectCapitalization(enteredText[0]);
             String translationWord = editString.toCorrectCapitalization(enteredText[1]);
             dictionaryDao.saveNewWord(baseWord, translationWord);
 
-            tgDictionaryBot.sendMessage(String.format(NEW_WORD_SUCCESSFULLY_ADDED, translationWord));
-            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_ADD);
         } else tgDictionaryBot.sendMessage(ADD_WORD_COMMAND_ENTERED_INCORRECTLY);
     }
 

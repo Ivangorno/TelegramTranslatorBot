@@ -29,7 +29,7 @@ public class DictionaryCommands {
                     "UPDATE french_dictionary SET french= '%1$s' WHERE english= '%2$s' ";
 
     public final static String UPDATE_ENGLISH_TRANSLATION_TO_FRENCH_WORD =
-            "UPDATE french_dictionary SET english= '%1$s' WHERE french= '%2$s'; " +
+            "UPDATE french_dictionary SET english= '%1$s' WHERE french= '%2$s' ; " +
                     "UPDATE english_dictionary SET english= '%1$s' WHERE french= '%2$s' ";
 
     public final static Set<String> ALL_COMMANDS = Set.of(ADD_WORD_MODE, DELETE_WORD_MODE, UPDATE_WORD_MODE, EXIT_TO_TRANSLATION_MODE, CHANGE_LANGUAGE);
