@@ -1,9 +1,0 @@
-{
-   "update":
-  [
-    {"Where":"Taxi"},
-    {"Turn":"Taxi2"},
-    {"Stop":"Taxi3"},
-    {"Call":"Taxi4"}
-  ]
-}

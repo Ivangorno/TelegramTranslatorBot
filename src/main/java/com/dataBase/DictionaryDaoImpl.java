@@ -62,35 +62,64 @@ public class DictionaryDaoImpl implements DictionaryDao {
         }
     }
 
-    public void deleteWord(String wordToDelete)  {
+    public void deleteWord(String enteredWord)  {
+        String sqlCommand;
+        String wordToDelete;
 
         try {
             Statement statement = connection.createStatement();
 
             if (languageOfDictionary.isEnglish()) {
+                sqlCommand = String.format("SELECT english FROM english_dictionary WHERE english= '%s'", enteredWord);
+                ResultSet resultSet = statement.executeQuery(sqlCommand);
+                resultSet.next();
+                wordToDelete = resultSet.getString("english");
+
                 sqlCommand1 = String.format(DELETE_ENGLISH_TO_FRENCH_TRANSLATION, wordToDelete);
                 sqlCommand2 = String.format(DELETE_FRENCH_TO_ENGLISH_TRANSLATION, wordToDelete);
 
             } else {
+                sqlCommand = String.format("SELECT french FROM french_dictionary WHERE french= '%s'", enteredWord);
+                ResultSet resultSet = statement.executeQuery(sqlCommand);
+                resultSet.next();
+                wordToDelete = resultSet.getString("french");
+
                 sqlCommand1 = String.format(DELETE_FRENCH_TO_ENGLISH_TRANSLATION, wordToDelete);
                 sqlCommand2 = String.format(DELETE_ENGLISH_TO_FRENCH_TRANSLATION, wordToDelete);
             }
             statement.execute(sqlCommand1);
             statement.execute(sqlCommand2);
 
-            tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, wordToDelete));
+            tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, enteredWord));
 
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+          tgDictionaryBot.sendMessage(String.format("Couldn't find word: \"%s\" in DataBase", enteredWord));
         }
     }
 
-    public void updateTranslation(String newTranslation, String wordToUpdate)  {
-
+    public void updateTranslation(String newTranslation, String enteredWord)  {
+        String sqlCommand;
+        String wordToUpdate;
 
         try {
             Statement statement = connection.createStatement();
+
+            if (languageOfDictionary.isEnglish()) {
+
+
+            sqlCommand = String.format("SELECT english FROM english_dictionary WHERE english= '%s'", enteredWord);
+            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            resultSet.next();
+            wordToUpdate = resultSet.getString("english");
+
+        } else {
+                sqlCommand = String.format("SELECT french FROM french_dictionary WHERE french= '%s'", enteredWord);
+                ResultSet resultSet = statement.executeQuery(sqlCommand);
+                resultSet.next();
+                wordToUpdate = resultSet.getString("french");
+            }
+
             sqlCommand1 = String.format(UPDATE_FRENCH_TRANSLATION_TO_ENGLISH_WORD, newTranslation, wordToUpdate);
             sqlCommand2 = String.format(UPDATE_ENGLISH_TRANSLATION_TO_FRENCH_WORD, newTranslation, wordToUpdate);
 
@@ -98,10 +127,10 @@ public class DictionaryDaoImpl implements DictionaryDao {
             statement.execute(sqlCommand2);
 
             tgDictionaryBot.sendMessage(String.format(WORD_UPDATED_SUCCESSFULLY, wordToUpdate, newTranslation));
-            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_UPDATE);
+//            tgDictionaryBot.sendMessage(ENTER_NEW_WORD_TO_UPDATE);
 
         } catch (SQLException e) {
-            tgDictionaryBot.sendMessage("word is not in DB");
+            tgDictionaryBot.sendMessage(String.format("Couldn't find word: \"%s\" in DataBase", enteredWord));
         }
     }
 
@@ -132,6 +161,27 @@ public class DictionaryDaoImpl implements DictionaryDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public int  getNumberOfAffectedRows(){
+        int n;
+        String sqlCommand;
+        try{
+            Statement statement = connection.createStatement();
+            sqlCommand = "WITH deleted AS(DELETE FROM english_dictionary WHERE (english)= 'Stop' " +
+                    "RETURNING *)\n  select count(*) FROM deleted";
+
+            ResultSet resultSet = statement.executeQuery(sqlCommand);
+            resultSet.next();
+
+            return resultSet.getInt("english");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 }

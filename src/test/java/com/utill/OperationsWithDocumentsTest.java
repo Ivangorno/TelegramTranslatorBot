@@ -25,12 +25,23 @@ class OperationsWithDocumentsTest {
 
     @Test
     public void testSendFromFileToDictionary() {
-        File mockedFile = new File("./src/test/resources/ADDwords.json");
-        operationsWithDocuments.sendFromFileToDictionary(parseJson(mockedFile));
+        File testFile = new File("./src/test/resources/ADDwords.json");
+        operationsWithDocuments.sendFromFileToDictionary(parseJson(testFile));
 
         //then
         verify(dictionaryFunctions, times(4)).addWord(any());
         verify(dictionaryFunctions, times(0)).updateWord(any());
         verify(dictionaryFunctions, times(0)).deleteWord(any());
+    }
+    @Test
+    public void testUpdateWordsFromFile(){
+        File testFile = new File("./src/test/resources/UPDwords.json");
+
+        operationsWithDocuments.sendFromFileToDictionary(parseJson(testFile));
+
+        verify(dictionaryFunctions, times(0)).addWord(any());
+        verify(dictionaryFunctions, times(4)).updateWord(any());
+        verify(dictionaryFunctions, times(0)).deleteWord(any());
+
     }
 }
