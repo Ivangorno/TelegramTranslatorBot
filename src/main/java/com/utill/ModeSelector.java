@@ -13,6 +13,9 @@ public class ModeSelector {
     @Autowired
     private TgDictionaryBot tgDictionaryBot;
 
+    @Autowired
+    private OperationsWithDocuments operationsWithDocuments;
+
     private boolean isEnglish = true;
     private boolean isAddWordMode = false;
     private boolean isUpdateWordMode = false;
@@ -21,6 +24,12 @@ public class ModeSelector {
     public void changeMode(String text) {
         if (text.contentEquals(CHANGE_LANGUAGE)) {
             isEnglish = changeTranslation(isEnglish);
+        } else if(text.contentEquals("Save DB To Jason")){
+            exitAllModes();
+            operationsWithDocuments.saveDbFileLocally(operationsWithDocuments.saveDbToJson());
+            tgDictionaryBot.SendDocument(operationsWithDocuments.getFile(operationsWithDocuments.saveDbToJson()));
+            operationsWithDocuments.deleteDocument();
+
         } else if (text.contentEquals(ADD_WORD_MODE)) {
             exitAllModes();
             tgDictionaryBot.sendMessage("Enter TEXT in format <base word> and <it's translation>");

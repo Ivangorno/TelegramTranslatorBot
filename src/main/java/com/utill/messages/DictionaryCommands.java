@@ -32,5 +32,5 @@ public class DictionaryCommands {
             "UPDATE french_dictionary SET english= '%1$s' WHERE french= '%2$s' ; " +
                     "UPDATE english_dictionary SET english= '%1$s' WHERE french= '%2$s' ";
 
-    public final static Set<String> ALL_COMMANDS = Set.of(ADD_WORD_MODE, DELETE_WORD_MODE, UPDATE_WORD_MODE, EXIT_TO_TRANSLATION_MODE, CHANGE_LANGUAGE);
+    public final static Set<String> ALL_COMMANDS = Set.of(ADD_WORD_MODE, DELETE_WORD_MODE, UPDATE_WORD_MODE, EXIT_TO_TRANSLATION_MODE, CHANGE_LANGUAGE, "Save DB To Jason");
 }

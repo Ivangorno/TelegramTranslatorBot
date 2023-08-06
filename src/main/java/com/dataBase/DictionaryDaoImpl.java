@@ -32,7 +32,6 @@ public class DictionaryDaoImpl implements DictionaryDao {
     private String sqlCommand2;
 
 
-    //TODO add error massage if trying to delete or update words that do not exist in DB
     public void saveNewWord(String englishWord, String frenchWord)  {
         String wordsAlreadyExistInDB = null;
         String successfullyAddedWord ;
@@ -91,7 +90,6 @@ public class DictionaryDaoImpl implements DictionaryDao {
             statement.execute(sqlCommand2);
 
             tgDictionaryBot.sendMessage(String.format(WORD_DELETED_SUCCESSFULLY, enteredWord));
-
 
         } catch (SQLException e) {
           tgDictionaryBot.sendMessage(String.format("Couldn't find word: \"%s\" in DataBase", enteredWord));
@@ -162,26 +160,4 @@ public class DictionaryDaoImpl implements DictionaryDao {
             throw new RuntimeException(e);
         }
     }
-
-
-    public int  getNumberOfAffectedRows(){
-        int n;
-        String sqlCommand;
-        try{
-            Statement statement = connection.createStatement();
-            sqlCommand = "WITH deleted AS(DELETE FROM english_dictionary WHERE (english)= 'Stop' " +
-                    "RETURNING *)\n  select count(*) FROM deleted";
-
-            ResultSet resultSet = statement.executeQuery(sqlCommand);
-            resultSet.next();
-
-            return resultSet.getInt("english");
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
-
 }

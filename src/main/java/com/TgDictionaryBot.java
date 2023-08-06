@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -17,6 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -109,6 +112,19 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
         }
     }
 
+    public void SendDocument(InputFile file){
+        SendDocument sendDocument = new SendDocument();
+        sendDocument.setDocument(file);
+        sendDocument.setChatId(message.getChatId());
+        try {
+            execute(sendDocument);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+
+        documents.deleteDocument();
+    }
+
     public void setButtons(SendMessage sendMessage) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -121,6 +137,8 @@ public class TgDictionaryBot extends TelegramLongPollingBot {
 
         keyboardFirstRow.add(new KeyboardButton(CHANGE_LANGUAGE));
         keyboardFirstRow.add(new KeyboardButton(EXIT_TO_TRANSLATION_MODE));
+        keyboardFirstRow.add(new KeyboardButton("Save DB To Jason"));
+
 
 
 //        keyboardFirstRow.add(new KeyboardButton());  If you wanna add button
